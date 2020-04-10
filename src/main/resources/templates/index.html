@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<!-- -->
+<!-- 使用thymeleaf需引入 -->
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <script src="../jquery/jquery-3.4.1.js"></script>
+    <script src="../jquery/jquery-3.4.1.min.js"></script>
+    <script>
+        function btn(){
+        var begtime = document.getElementById("in1").value;
+        var endtime = document.getElementById("in2").value;
+        var jysystm = document.getElementById("slt").value;
+    	var url = '/findbydate?begtime='+begtime+'&endtime='+endtime+'&jysystm='+jysystm;
+    	$('#div1').load(url);
+	}
+    </script>
+</head>
+<body>
+<div  id="tableP">
+    <select id="slt" style="height:25px;">
+        <option value="all" selected="selected">所有交易量</option>
+        <option value="客户信息">客户信息</option>
+        <option value="互联前置">互联前置</option>
+    </select>
+        <input type="date" id="in1" name="begtime">&nbsp;至&nbsp;
+        <input type="date" id="in2" name="endtime">
+        <button type="button" onclick="btn();">查询</button>
+        <button type="button" onclick="location.href='/excel/getUser'">导出</button>
+    <div id="div1" th:fragment="div1">
+    <table border="1">
+        <caption>交易信息</caption></br>
+        <tr>
+            <th style="width: 90px;height: 25.800;" >交易系统</th>
+            <th style="width: 190px;height: 25.800;" >交易时间</th>
+            <th style="width: 90px;height: 25.800;" >交易量</th>
+            <th>操作</th>
+        </tr>
+        <!-- 通过th命令使用一些操作 -->
+        <!-- 通过${} 使用变量 -->
+        <tr style="text-align: center" th:each="item: ${list}">
+          <!--  <div th:th:switch="${item.jysystm}">
+              <th th:case="'khxx'">客户信息</th>
+                <th th:case="'khrz'">客户认证</th> </div>-->
+            <td style="width: 90px;height: 25.800;" th:text="${item.jysystm}">0</td>
+            <td style="width: 190px;height: 25.800;" th:text="${item.jytime}">0</td>
+            <td style="width: 90px;height: 25.800;" th:text="${item.jycount}">0</td>
+            <td><a th:href="@{/getDetail(dasn=${item.dasn})}">详细信息</a></td>
+
+        </tr>
+    </table>
+    </div>
+</div>
+</div>
+</body>
+</html>

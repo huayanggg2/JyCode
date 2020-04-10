@@ -1,0 +1,10 @@
+[{
+  "sysName": "互联前置",
+  "apiUrl": "http://158.222.187.16:12900/api/plugins/com.loginsight.plugins.spl/spl/absolute?query=sourceType%3A%E4%BA%92%E8%81%94%E5%89%8D%E7%BD%AE_server_serviceMonitor%20%20%7C%20stats%20sum%28success_tran%29%20as%20%22ST%22%20%7C%20calculate%20%22ST%20as%20int%22&from=today2T16%3A00%3A00.000Z&to=today1T16%3A00%3A00.000Z&limit=0&offset=0",
+  "serUrl": "http://158.222.187.16:12900/api/plugins/com.loginsight.plugins.spl/spl/absolute?query=sourceType%3A%E4%BA%92%E8%81%94%E5%89%8D%E7%BD%AE_server_serviceMonitor%20%20%20%7C%20stats%20sum%28success_tran%29%20as%20%22s%22%20sum%28failure_tran%29%20as%20%22f%22%20by%20service%20%7C%20calculate%20%22s%2F%28s%2Bf%29%2A100%20as%20int%22%20%7C%20sort%20-s%20%7C%20rename%20%22s%22%20as%20%22%E6%88%90%E5%8A%9F%E4%BA%A4%E6%98%93%22%20%7C%20rename%20%22f%22%20as%20%22%E5%A4%B1%E8%B4%A5%E4%BA%A4%E6%98%93%22%20%7C%20rename%20%22_calc_val%22%20as%20%22%E6%88%90%E5%8A%9F%E7%8E%87%28%25%29%22&from=today2T16%3A00%3A00.000Z&to+today1T16%3A00%3A00.000Z&limit=0&offset=0"
+},
+{
+  "sysName": "用户信息",
+  "apiUrl": "http://158.222.187.16:12900/api/plugins/com.loginsight.plugins.spl/spl/absolute?query=sourceType%3A%E4%BA%92%E8%81%94%E5%89%8D%E7%BD%AE_server_serviceMonitor%20%20%7C%20stats%20sum%28success_tran%29%20as%20%22ST%22%20%7C%20calculate%20%22ST%20as%20int%22&from=\"+today2+\"T16%3A00%3A00.000Z&to=\"+today1+\"T16%3A00%3A00.000Z&limit=0&offset=0",
+  "serUrl": "http://158.222.187.16:12900/api/plugins/com.loginsight.plugins.spl/spl/absolute?query=sourceType%3A%E4%BA%92%E8%81%94%E5%89%8D%E7%BD%AE_server_serviceMonitor%20%20%20%7C%20stats%20sum%28success_tran%29%20as%20%22s%22%20sum%28failure_tran%29%20as%20%22f%22%20by%20service%20%7C%20calculate%20%22s%2F%28s%2Bf%29%2A100%20as%20int%22%20%7C%20sort%20-s%20%7C%20rename%20%22s%22%20as%20%22%E6%88%90%E5%8A%9F%E4%BA%A4%E6%98%93%22%20%7C%20rename%20%22f%22%20as%20%22%E5%A4%B1%E8%B4%A5%E4%BA%A4%E6%98%93%22%20%7C%20rename%20%22_calc_val%22%20as%20%22%E6%88%90%E5%8A%9F%E7%8E%87%28%25%29%22&from=today2T16%3A00%3A00.000Z&to=today1T16%3A00%3A00.000Z&limit=0&offset=0"
+}]

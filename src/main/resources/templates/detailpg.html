@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<!-- -->
+<!-- 使用thymeleaf需引入 -->
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <script src="../jquery/jquery-3.4.1.js"></script>
+    <script src="../jquery/jquery-3.4.1.min.js"></script>
+    <script>
+        function serapibtn(){
+        var serapi = document.getElementById("ins").value;
+    	var url = '/searchOne?serapi='+serapi;
+        $('#divs').load(url);
+	}
+    </script>
+</head>
+<body>
+<div  id="tableP">
+    <input type="text" id="ins" name="serapi">
+    <button type="button" onclick="serapibtn();">搜索</button>&nbsp;&nbsp;&nbsp;&nbsp;
+    <button type="button" onclick="location.href='/excel/getDetail'">导出excel</button>
+    <div id="divs" th:fragment="divs">
+        <table border="1">
+            <caption>交易详情</caption></br>
+            <tr>
+                <th style="width: 600px;height: 25.800;">serviceApi</th>
+                <th style="width: 100px;height: 25.800;">成功笔数</th>
+                <th style="width: 80px;height: 25.800;" >失败笔数</th>
+                <th style="width: 80px;height: 25.800;">成功率(%)</th>
+            </tr>
+            <!-- 通过th命令使用一些操作 -->
+            <!-- 通过${} 使用变量 -->
+            <tr style="text-align: center" th:each="item: ${delist}">
+                <!--  <div th:th:switch="${item.jysystm}">
+                    <th th:case="'khxx'">客户信息</th>
+                      <th th:case="'khrz'">客户认证</th> </div>-->
+                <td style="width: 600px;height: 25.800;" th:text="${item.serapi}">0</td>
+                <td style="width: 100px;height: 25.800;" th:text="${item.suces}">0</td>
+                <td style="width: 80px;height: 25.800;" th:text="${item.fails}">0</td>
+                <td style="width: 80px;height: 25.800;" th:text="${item.perct}">0</td>
+
+            </tr>
+        </table>
+    </div></br>
+
+</div>
+</div>
+</body>
+</html>
