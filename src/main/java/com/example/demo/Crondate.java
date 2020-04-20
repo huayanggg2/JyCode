@@ -1,5 +1,6 @@
 package com.example.demo;
 
+import com.example.demo.alltools.GetDatetime;
 import com.example.demo.dao.JydataDao;
 import com.example.demo.model.Jydata;
 import com.example.demo.model.Jydetail;
@@ -13,13 +14,11 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.*;
-import java.text.SimpleDateFormat;
 import java.util.Base64;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 @Component
+
 public class Crondate {
     @Autowired
     JydataDao jydataDao;
@@ -28,23 +27,19 @@ public class Crondate {
     @Scheduled(cron = "0 0 2 * * *")
     public void scheduled1(){
         Jydata jydata = new Jydata();
+        GetDatetime gdt = new GetDatetime();
         StringBuffer buffer = new StringBuffer();
         URLConnection httpConn = null;
         BufferedReader reader = null;
-        Date today = new Date();
-        Calendar c = Calendar.getInstance();
-        c.setTime(today);
-        c.add(Calendar.DAY_OF_MONTH, -1);
-        String today1= new SimpleDateFormat("yyyy-MM-dd").format(c.getTime());
-        String yestoday = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").format(c.getTime());
-        c.add(Calendar.DAY_OF_MONTH, -1);
-        String today2= new SimpleDateFormat("yyyy-MM-dd").format(c.getTime());
-        jydata.setJytime(yestoday);
+        gdt.getDatetime();
+        jydata.setJytime(gdt.dateToday);
         try {
+            //社保医疗
+            String requestURL1 = "http://158.222.187.16:12900/api/plugins/com.loginsight.plugins.spl/spl/absolute?query=SourceModuleName%3A%E7%A4%BE%E4%BF%9D%E5%8C%BB%E7%96%97%E4%BA%91_uat_mfs_virtual_serviceMonitor.log%20%7C%20stats%20sum%28success_tran%29%20as%20%22ST%22%20%7C%20calculate%20%22ST%20as%20int%22&from="+gdt.today2+"%3A00%3A00.000Z&to="+gdt.today1+"%3A00%3A00.000Z&filter=streams%3A5dccfec54e00b6be25599b55&limit=0&offset=0";
             //客户信息
-            //String requestURL1 = "http://158.222.187.16:12900/api/plugins/com.loginsight.plugins.spl/spl/absolute?query=SourceModuleName%3A%E5%AE%A2%E6%88%B7%E4%BF%A1%E6%81%AF_serviceMonitor%20%20%7C%20stats%20sum%28success_tran%29%20as%20%22ST%22%20%7C%20calculate%20%22ST%20as%20int%22&from="+today2+"T16%3A00%3A00.000Z&to="+today1+"T16%3A00%3A00.000Z&filter=streams%3A5cabf3db4e00b63682da14be&limit=0&offset=0";
+            //String requestURL1 = "http://158.222.187.16:12900/api/plugins/com.loginsight.plugins.spl/spl/absolute?query=SourceModuleName%3A%E5%AE%A2%E6%88%B7%E4%BF%A1%E6%81%AF_serviceMonitor%20%20%7C%20stats%20sum%28success_tran%29%20as%20%22ST%22%20%7C%20calculate%20%22ST%20as%20int%22&from="+gdt.today2+"%3A00%3A00.000Z&to="+gdt.today1+"%3A00%3A00.000Z&filter=streams%3A5cabf3db4e00b63682da14be&limit=0&offset=0";
             //互联前置
-            String requestURL1 = "http://158.222.187.16:12900/api/plugins/com.loginsight.plugins.spl/spl/absolute?query=sourceType%3A%E4%BA%92%E8%81%94%E5%89%8D%E7%BD%AE_server_serviceMonitor%20%20%7C%20stats%20sum%28success_tran%29%20as%20%22ST%22%20%7C%20calculate%20%22ST%20as%20int%22&from="+today2+"T16%3A00%3A00.000Z&to="+today1+"T16%3A00%3A00.000Z&limit=0&offset=0";
+            //String requestURL1 = "http://158.222.187.16:12900/api/plugins/com.loginsight.plugins.spl/spl/absolute?query=sourceType%3A%E4%BA%92%E8%81%94%E5%89%8D%E7%BD%AE_server_serviceMonitor%20%20%7C%20stats%20sum%28success_tran%29%20as%20%22ST%22%20%7C%20calculate%20%22ST%20as%20int%22&from="+gdt.today2+"%3A00%3A00.000Z&to="+gdt.today1+"%3A00%3A00.000Z&limit=0&offset=0";
             //String requestURL1 = "http://158.222.187.16:12900/api/plugins/com.loginsight.plugins.spl/spl/absolute?query=sourceType%3A%E4%BA%92%E8%81%94%E5%89%8D%E7%BD%AE_server_serviceMonitor%20%20%7C%20stats%20sum%28success_tran%29%20as%20%22ST%22%20%7C%20calculate%20%22ST%20as%20int%22&from=2020-04-06T16%3A00%3A00.000Z&to=2020-04-07T16%3A00%3A00.000Z&limit=0&offset=0";
             String username = "admin";
             String password = "oneapm";
@@ -63,24 +58,24 @@ public class Crondate {
             }
             JSONObject ob = new JSONObject(buffer.toString());
             JSONArray ja = ob.getJSONArray("result");
-
+            System.out.println(ja);
             for (int i = 0; i < ja.length(); i++) {
                 JSONObject jo = ja.getJSONObject(i);
                 int jycount = (int) jo.getLong("_calc_val");
                 jydata.setJycount(jycount);
-                jydata.setJysystm("互联前置");
+                jydata.setJysystm("社保医疗");
             }
         } catch (IOException e) {
             e.printStackTrace();
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        dasn = "hlqz"+today1;
+        dasn = "sbyl"+gdt.dateToday;
         jydata.setDasn(dasn);
         jydataDao.setAll(jydata);
+        List<Jydetail> ljd = gse.getService(dasn,gdt.today1,gdt.today2);
+        jydataDao.setSer(ljd);
 
-      List<Jydetail> ljd = gse.getService(dasn,today1,today2);
-      jydataDao.setSer(ljd);
     }
 
 }

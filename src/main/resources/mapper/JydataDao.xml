@@ -10,7 +10,7 @@
     <select id="getAll" resultType="com.example.demo.model.Jydata" >
         SELECT
         *
-        FROM testable
+        FROM testable order by jytime
     </select>
     <!--通过时间段和交易系统查询-->
     <select id="getBytime" resultType="com.example.demo.model.Jydata">
@@ -18,14 +18,14 @@
         testable
         <where>
             <if test="begtime != null and endtime != null and begtime != '' and endtime != ''">
-                date_format(jytime,'%Y-%m-%d')
+                date_format(jytime,'%Y-%m-%dT%H:%i:%s')
                 between #{begtime} and #{endtime}
             </if>
             <if test="jysystm != 'all'">
                 and jysystm = #{jysystm}
             </if>
         </where>
-
+        order by jytime
     </select>
 
     <!-- 增加交易信息 -->
@@ -39,7 +39,7 @@
 <!--新增每个时间的交易详情-->
     <insert id="setSer" parameterType="java.util.List">
         INSERT INTO
-        detable
+        perhour
         (dasn,serapi,suces,fails,perct)
         VALUES
         <foreach collection="ljd" item="itemls" separator=",">
@@ -51,14 +51,14 @@
         SELECT
         *
         FROM
-        detable where dasn = #{dasn}
+        perhour where dasn = #{dasn}
     </select>
     <!--根据serviceapi查询-->
     <select id="searchOne" parameterType="string" resultType="com.example.demo.model.Jydetail" >
         SELECT
         *
         FROM
-        detable
+        perhour
         where
         dasn = #{dasn}
         <if test="serapi != '' and serapi != null">
