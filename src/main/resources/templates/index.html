@@ -105,10 +105,17 @@ function submitImageBase64(){
     	var url = '/findbydate?begtime='+begtime+'&endtime='+endtime+'&jysystm='+jysystm;
         $('#div1').load(url);
 	}
-
+        function findByday(){
+        var begtime = document.getElementById("beg1").value;
+        var endtime = document.getElementById("end1").value;
+        var jysystm = document.getElementById("sltsys").value;
+    	var url = '/findbydate?begtime='+begtime+'&endtime='+endtime+'&jysystm='+jysystm;
+    	$('#div1').load(url);
+	}
     </script>
 </head>
 <body>
+<!--时间段为每小时-->
 <div id="tableP">
     <select id="slt" style="height:25px;">
         <option value="all" selected="selected">所有交易量</option>
@@ -145,6 +152,8 @@ function submitImageBase64(){
     </div>
 
     <button onclick="myeChart();">生成图表</button>
+</div>
+<!--时间段为一天-->
 </div>
 </body>
 </html>

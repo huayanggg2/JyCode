@@ -18,7 +18,6 @@ import java.util.Base64;
 import java.util.List;
 
 @Component
-
 public class Crondate {
     @Autowired
     JydataDao jydataDao;

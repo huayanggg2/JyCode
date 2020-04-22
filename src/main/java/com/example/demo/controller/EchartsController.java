@@ -13,7 +13,7 @@ import java.util.List;
 @ResponseBody
 @RequestMapping("/jypage")
 public class EchartsController {
-    @RequestMapping("/alljy")//查询所有
+    @RequestMapping("/alljy")//查询所有传给echarts的值
     public List<Jydata> index(HttpServletRequest request) {
         List<Jydata> getResult = (List<Jydata>) request.getSession().getAttribute("list");
         return getResult;

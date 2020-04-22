@@ -30,7 +30,6 @@ public class JydataController {
         String begtime = request.getParameter("begtime");
         String endtime = request.getParameter("endtime");
         String jysystm = request.getParameter("jysystm");
-       // String mlist = request.getParameter("");
         List<Jydata> list = jydataService.getBytime(begtime,endtime,jysystm);
         request.getSession().setAttribute("list",list);//设置excel打印值
         model.addAttribute("list",list);

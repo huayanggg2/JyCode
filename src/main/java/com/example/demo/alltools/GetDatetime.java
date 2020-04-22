@@ -12,8 +12,9 @@ public class GetDatetime {
             Date today = new Date();
             Calendar c = Calendar.getInstance();
             c.setTime(today);
-            dateToday = new SimpleDateFormat("yyyy-MM-dd HH").format(c.getTime());
-            c.set(Calendar.HOUR, c.get(Calendar.HOUR) -8);
+            c.set(Calendar.HOUR, c.get(Calendar.HOUR) -1);
+            dateToday = new SimpleDateFormat("yyyy-MM-dd HH").format(c.getTime());//获取现在时间
+            c.set(Calendar.HOUR, c.get(Calendar.HOUR) -7);//转换时区
             /*c.add(Calendar.HOUR_OF_DAY,-8);*/
             String dateToday1 = new SimpleDateFormat("yyyy-MM-dd HH").format(c.getTime());
             today1 = dateToday1.replace(" ","T");
