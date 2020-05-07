@@ -2,12 +2,12 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <!-- 这里填写对应的Dao文件所在的路径 -->
-<mapper namespace="com.example.demo.dao.JydataDao"    >
+<mapper namespace="com.example.demo.dao.JydataDao">
     <!-- 填写数据库里实例Person对应的表的表名 -->
-   <!-- <include refid="table" />-->
-   <!-- <sql id="table">testable</sql>-->
+    <!-- <include refid="table" />-->
+    <!-- <sql id="table">testable</sql>-->
     <!--根目录下查询所有-->
-    <select id="getAll" resultType="com.example.demo.model.Jydata" >
+    <select id="getAll" resultType="com.example.demo.model.Jydata">
         SELECT
         *
         FROM testable order by jytime
@@ -18,8 +18,7 @@
         testable
         <where>
             <if test="begtime != null and endtime != null and begtime != '' and endtime != ''">
-                date_format(jytime,'%Y-%m-%dT%H:%i:%s')
-                between #{begtime} and #{endtime}
+                jytime &gt;= #{begtime} and jytime &lt; #{endtime}
             </if>
             <if test="jysystm != 'all'">
                 and jysystm = #{jysystm}
@@ -36,29 +35,29 @@
         VALUES
         (#{jysystm},#{jytime},#{jycount},#{dasn})
     </insert>
-<!--新增每个时间的交易详情-->
+    <!--新增每个时间的交易详情-->
     <insert id="setSer" parameterType="java.util.List">
         INSERT INTO
-        perhour
+        detable<!--xiugaile-->
         (dasn,serapi,suces,fails,perct)
         VALUES
         <foreach collection="ljd" item="itemls" separator=",">
-        (#{itemls.dasn},#{itemls.serapi},#{itemls.suces},#{itemls.fails},#{itemls.perct})
+            (#{itemls.dasn},#{itemls.serapi},#{itemls.suces},#{itemls.fails},#{itemls.perct})
         </foreach>
     </insert>
-<!--查询某个系统某个时间段的交易详情-->
-    <select id="getDetail" parameterType="string" resultType="com.example.demo.model.Jydetail" >
+    <!--查询某个系统某个时间段的交易详情-->
+    <select id="getDetail" parameterType="string" resultType="com.example.demo.model.Jydetail">
         SELECT
         *
         FROM
-        perhour where dasn = #{dasn}
+        detable where dasn = #{dasn}
     </select>
     <!--根据serviceapi查询-->
-    <select id="searchOne" parameterType="string" resultType="com.example.demo.model.Jydetail" >
+    <select id="searchOne" parameterType="string" resultType="com.example.demo.model.Jydetail">
         SELECT
         *
         FROM
-        perhour
+        detable
         where
         dasn = #{dasn}
         <if test="serapi != '' and serapi != null">

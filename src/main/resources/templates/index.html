@@ -10,6 +10,22 @@
     <script type="text/javascript" src="../jquery/echarts.min.js"></script>
     <script type="text/javascript" src="../jquery/echarts.js"></script>
     <script type="text/javascript">
+
+$(function (){
+    var myDate = new Date(), Y = myDate.getFullYear(), M = myDate.getMonth() + 1, D = myDate.getDate();
+	//处理月是一位的情况
+	if((M + '').length == 1){
+		M = '0' + (M + '');
+	}
+	//处理日是一位的情况
+	if((D + '').length == 1){
+		D = '0' + (D + '')
+	}
+	var curDay = Y + '-' + M + '-' + D;
+	var curDay2 = Y + '-' + M + '-' + (D-1);
+	$('#in1').val(curDay2+'T00:00')
+	$('#in2').val(curDay+'T00:00')
+});
     var imagesBase64="";
     function myeChart(){
 	//将Echarts初始化到div中
@@ -112,6 +128,8 @@ function submitImageBase64(){
     	var url = '/findbydate?begtime='+begtime+'&endtime='+endtime+'&jysystm='+jysystm;
     	$('#div1').load(url);
 	}
+
+
     </script>
 </head>
 <body>
@@ -152,6 +170,8 @@ function submitImageBase64(){
     </div>
 
     <button onclick="myeChart();">生成图表</button>
+    <button onclick="location.href='/showMotor'">查看性能参数</button>
+    <button onclick="location.href='/execShell'">执行shell</button>
 </div>
 <!--时间段为一天-->
 </div>

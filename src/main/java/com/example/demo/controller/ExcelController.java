@@ -86,7 +86,7 @@ public class ExcelController {
         XSSFClientAnchor anchor = null;
         int index = 1;
         for (byte[] image : images) {
-            anchor = new XSSFClientAnchor(0, 0, 0, 0, 4 , 1, 13 , 20);
+            anchor = new XSSFClientAnchor(0, 0, 0, 0, 4, 1, 13, 20);
             Picture pict = patriarch.createPicture(anchor, workbook.addPicture(image, XSSFWorkbook.PICTURE_TYPE_PNG));
             pict.resize(0.9);
             index++;
