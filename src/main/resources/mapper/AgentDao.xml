@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<!-- 这里填写对应的Dao文件所在的路径 -->
+<mapper namespace="com.example.demo.dao.AgentDao">
+    <resultMap type="com.example.demo.model.Agentsystm" id="agentmap">
+        <result property="sysgp" column="sysgp"/>
+        <result property="gpsn" column="gpsn"/>
+        <result column="hipcnt" property="ipcnt"/>
+        <result column="runproces" property="runproces"/>
+        <!--一一对多查询-->
+        <!-- <collection property="hostdtls" ofType="com.example.demo.model.Hostdtl">
+             <id column="hgpsn" property="hgpsn"/>
+             <result column="csdeip" property="csdeip"/>
+             <result column="agentvsn" property="agentvsn"/>
+             <result column="system" property="system"/>
+         </collection>
+ -->
+    </resultMap>
+    <resultMap type="com.example.demo.model.Agentpmfc" id="pmfcmap">
+        <result property="ahostip" column="ahtp"/>
+        <result column="hcdp" property="acsdeip"/>
+        <result column="hatn" property="asvn"/>
+        <result column="avts" property="vxstatus"/>
+        <result column="acpu" property="cpu"/>
+        <result column="amem" property="mem"/>
+        <result column="asyscpu" property="syscpu"/>
+        <result column="asysmem" property="sysmem"/>
+    </resultMap>
+
+    <select id="selectsystem" resultMap="agentmap">
+        select sysgp, gpsn, count(hostip) as hipcnt, sum(vxstatus) as runproces from
+        (select sysgp, hostdtl.hgpsn gpsn, hostip from sysname left join hostdtl on sysname.gpsn = hostdtl.hgpsn )d
+        left join
+        (select a.ahostip,a.vxstatus from agentpmfc a,(SELECT ahostip,MAX(checktime) checktime FROM agentpmfc GROUP BY
+        ahostip) c
+        WHERE a.checktime = c.checktime AND a.ahostip = c.ahostip AND a.vxstatus = 1) b
+        on d.hostip = b.ahostip
+        group by sysgp, gpsn
+    </select>
+
+    <select id="selectBysystm" resultMap="pmfcmap" parameterType="string">
+        SELECT htl.hostip ahtp,htl.csdeip hcdp,htl.agentvsn hatn,atc.vxstatus avts,atc.cpu acpu,atc.mem
+        amem,atc.syscpu asyscpu,atc.sysmem asysmem FROM hostdtl htl
+        LEFT JOIN (SELECT a.* FROM agentpmfc a, (SELECT ahostip,MAX(checktime) checktime FROM agentpmfc GROUP BY
+        ahostip) b
+        WHERE a.checktime = b.checktime AND a.ahostip = b.ahostip) atc ON htl.hostip = atc.ahostip WHERE htl.hgpsn =
+        #{gpsn}
+    </select>
+
+    <select id="selectByIp" resultType="com.example.demo.model.Agentpmfc">
+        SELECT htl.hostip,c.acsdeip,htl.agentvsn,c.vxstatus vxstatus,c.cpu
+        cpu,c.mem
+        mem,c.syscpu syscpu,c.sysmem sysmem FROM hostdtl htl INNER JOIN (SELECT a.* FROM agentpmfc a, (SELECT
+        ahostip,MAX(checktime) checktime FROM agentpmfc GROUP BY ahostip) b WHERE a.checktime = b.checktime AND
+        a.ahostip = b.ahostip) c on htl.hostip = c.ahostip WHERE htl.hostip in
+        <foreach collection="array" item="hostip" index="index"
+                 open="(" close=")" separator=",">
+            #{hostip}
+        </foreach>
+        OR c.acsdeip in
+        <foreach collection="array" item="hostip" index="index"
+                 open="(" close=")" separator=",">
+            #{hostip}
+        </foreach>
+    </select>
+    <select id="selectCpu" resultType="com.example.demo.model.Agentpmfc">
+        SELECT cpu FROM agentpmfc WHERE ahostip = #{hostip} AND checktime >= DATE_ADD(now(),INTERVAL
+        #{period} MINUTE)
+    </select>
+    <select id="selectMem" resultType="com.example.demo.model.Agentpmfc">
+        SELECT mem FROM agentpmfc WHERE ahostip = #{hostip} AND checktime >= DATE_ADD(now(),INTERVAL
+        #{period} MINUTE)
+    </select>
+    <select id="selectAllip" resultType="string" parameterType="string">
+        SELECT hostip FROM `hostdtl` WHERE hgpsn = #{gpsn}
+    </select>
+</mapper>

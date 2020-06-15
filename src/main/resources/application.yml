@@ -4,9 +4,11 @@ server:
 spring:
   datasource:
     name:
-    url: jdbc:mysql://192.168.37.111:3306/test?useUnicode=true&characterEncoding=UTF-8&allowMultiQueries=true&serverTimezone=UTC
+    url: jdbc:mysql://158.222.187.109:3306/test?useUnicode=true&characterEncoding=UTF-8&allowMultiQueries=true&serverTimezone=UTC
     username: root
-    password: huayang
+    password: 123
 
 mybatis:
   mapper-locations: classpath:mapper/*.xml
+
+

@@ -1,13 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <!--var url = '/sshLogin?hostip='+hostip+'&username='+username+'&password='+password+'&logdir='+logdir;-->
-<html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <script src="../jquery/jquery-3.4.1.js"></script>
-    <script src="../jquery/jquery-3.4.1.min.js"></script>
-    <script>
-        function execShell(){
-        var otest = document.getElementById("divssh");
+<!--
+var otest = document.getElementById("divssh");
         otest.innerHTML = ""
         var hostip = document.getElementById("hsip").value;
     	var username =document.getElementById("unam").value;
@@ -15,13 +10,11 @@
     	var logdir = document.getElementById("logdir").value;
     	var iparr = new Array();
     	iparr = hostip.split(",");
-    	var url = '/sshLogin?hostip='+hostip+'&username='+username+'&password='+password+'&logdir='+logdir;
-    	$.get(url, function(result){
-    	if(iparr.length > 1){
+var url = '/agent/sshLogin?hostip='+hostip+'&username='+username+'&password='+password+'&logdir='+logdir;
+$.get(url, function(result){
+
     	var strArr=result.split("\n");
-    	}else{
-    	var strArr=result.split("!");
-    	}
+
         var i = 0;
         setInterval(function(){
         if(i<strArr.length){
@@ -31,20 +24,72 @@
         i++;
          }},2000)
         });
+-->
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <script src="../jquery/jquery-3.4.1.js"></script>
+    <script src="../jquery/jquery-3.4.1.min.js"></script>
+    <script>
+        function execShell(){
+        var hostip = document.getElementById("hsip").value;
+    	var username =document.getElementById("unam").value;
+    	var password = document.getElementById("pass").value;
+    	var logdir = document.getElementById("logdir").value;
+    	var url = '/jssh/sshLogin'
+    	  var obj = {"bizContent":{"hostip":hostip,"username":username,"password":password,"logdir":logdir}};
+           var bizContent = JSON.stringify(obj);
+            console.log(bizContent);
+    	$.ajax({
+			 url: url,//使用自己交互到后台的url
+			 type : "POST",
+			 contentType: "application/json;charset=UTF-8",
+			 dataType: 'json',
+			 data: bizContent,
+					success : function(result) {
+                       console.log(result)
+					}
+		 });
+
+}
+ function subwords(){
+ var words = document.getElementById("wordsup").value;
+         $.ajax({
+			 url: "/subwords",//使用自己交互到后台的url
+			 type : "post",
+				data:{
+					'words':words
+				     },
+					success : function(da) {
+                        $('#wordres').html(da);
+					}
+		 });
 	}
+
 
     </script>
 </head>
 <body>
 <div id="sshTab">
+    <p>探针部署:</p>
     主机IP：<input type="text" id="hsip" name="hostip">
     用户名：<input type="text" id="unam" name="username">
     密码：<input type="password" id="pass" name="password">
     日志路径：<input type="text" id="logdir" name="logdir">
-    <button type="button" onclick="execShell();">执行</button>
+    <button type="button" onclick="execShell();">部署</button>
     <div id="divssh" th:fragment="divssh" style="width:100%;">
     </div>
+</div>
 
+<div>
+    <form method="post" action="/fileup" enctype="multipart/form-data">
+        <input type="file" multiple="multiple" name="files">
+        <input type="submit" value="上传">
+    </form>
+</div>
+<div>
+    <textarea id="wordsup" rows="16" cols="80"></textarea>
+    <button onclick="subwords();">上传</button>
+    <p id="wordres"></p>
 </div>
 </body>
 </html>

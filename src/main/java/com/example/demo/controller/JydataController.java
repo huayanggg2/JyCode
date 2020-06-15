@@ -18,7 +18,7 @@ public class JydataController {
     JydataService jydataService;
     String dasn;
 
-    @RequestMapping("/")//查询所有
+    @RequestMapping("/index")//查询所有
     public ModelAndView index(HttpServletRequest request) {
         ModelAndView mav = new ModelAndView("index");
         List<Jydata> list = jydataService.getAll();

@@ -1,40 +1,86 @@
 package com.example.demo.controller;
 
 import ch.ethz.ssh2.Connection;
+import com.alibaba.fastjson.JSONException;
+import com.alibaba.fastjson.JSONObject;
 import com.example.demo.alltools.Jshell;
+import com.example.demo.model.Sshhost;
+
+import com.example.demo.service.AgentService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.*;
+import java.util.regex.Pattern;
 
 
 @Controller
 public class JsshController {
-    @RequestMapping("/execShell")//
-    public String JsshController() {
-        return "sshLogin.html";
-    }
-
-    @ResponseBody
-    @RequestMapping("/sshLogin")//
-    public String sshLogin(String hostip, String username, String password, String logdir) {
+    @Autowired
+    AgentService agentService;
+    @ResponseBody//部署agent
+    @PostMapping(value = "/jssh/sshLogin",produces = "application/json;charset=UTF-8")
+    public Map<String,Object> sshLogin(@RequestBody String json) throws JSONException {
+        JSONObject ob = JSONObject.parseObject(json);
+        String username = ob.getJSONObject("bizContent").getString("username");
+        String hostip = ob.getJSONObject("bizContent").getString("hostip");
+        String password = ob.getJSONObject("bizContent").getString("password");
+        String logdir = ob.getJSONObject("bizContent").getString("logdir");
         String[] iparr = hostip.split(",");//将hostip拆分成数组
+        List<String> lst = new ArrayList<String>();
+        Sshhost sshhost = new Sshhost();
         Jshell jshell = new Jshell();
         Connection conn = null;
+        Map<String, Object> resultMap = new HashMap<String, Object>();
+        sshhost.setUsername(username);
+        sshhost.setPassword(password);
         if (iparr.length > 1) {//当ip个数大于1时
             String[] result;
             String lastres;
-            String res = "";
             for (int i = 0; i < iparr.length; i++) {
-                conn = Jshell.login(iparr[i], username, password);
-                result = jshell.execute(conn, iparr[i], logdir).split("\n");
+                sshhost.setHostip(iparr[i]);
+                conn = jshell.login(sshhost);
+                String cmd = "cd /home && unzip logtool.zip>/dev/null && sh /home/logtool/vxlog.sh " + iparr[i] + " " + logdir;
+                jshell.scpagt("E:/logtool.zip","/home/",conn);
+                result = jshell.execute(conn,cmd).split("\n");
                 lastres = iparr[i] + " " + result[result.length - 1];
-                res += lastres + "\n";
-            }
-            return res;
+                lst.add(lastres);
+        }
+            resultMap.put("status", "0000");
+            resultMap.put("message","成功");
+            resultMap.put("lst", lst);
+            return resultMap;
         } else {//当ip个数为1时
-            conn = Jshell.login(hostip, username, password);
-            String res = jshell.execute(conn, hostip, logdir);
-            return res;
+            sshhost.setHostip(hostip);
+            conn = jshell.login(sshhost);
+            String cmd = "cd /home && unzip logtool.zip>/dev/null && sh /home/logtool/vxlog.sh " + hostip + " " + logdir;
+            jshell.scpagt("E:/logtool.zip","/home/",conn);
+            String pattn = ".*失败.*";
+            List<JSONObject> jlst = new ArrayList();
+
+            String[] rarr = jshell.execute(conn,cmd).split("\n");
+            for (int i = 0,rl = rarr.length; i < rl; i++) {
+                JSONObject jsonObject = new JSONObject();
+                String rtn = rarr[i];
+                boolean isMatch = Pattern.matches(pattn, rtn);
+                if(isMatch){
+                    jsonObject.put("mesg",rtn);
+                    jsonObject.put("stus","error");
+                    jlst.add(jsonObject);
+                }else{
+                    jsonObject.put("mesg",rtn);
+                    jsonObject.put("stus","success");
+                    jlst.add(jsonObject);
+                }
+            }
+
+            resultMap.put("status", "0000");
+            resultMap.put("message","成功");
+            resultMap.put("jlst", jlst);
+            return resultMap;
         }
     }
+
+
 }
