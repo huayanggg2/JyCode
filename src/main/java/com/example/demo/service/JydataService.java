@@ -3,6 +3,7 @@ package com.example.demo.service;
 import com.example.demo.dao.JydataDao;
 import com.example.demo.model.Jydata;
 import com.example.demo.model.Jydetail;
+import com.example.demo.model.Jysystm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -30,5 +31,9 @@ public class JydataService
 
     public List<Jydetail> searchOne(String dasn, String serapi) {
         return jydataDao.searchOne(serapi,dasn);
+    }
+
+    public List<Jysystm> getSystm() {
+        return jydataDao.getSystm();
     }
 }

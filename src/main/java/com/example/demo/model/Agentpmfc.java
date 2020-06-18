@@ -8,6 +8,15 @@ public class Agentpmfc {
         private String cpu;//探针cpu
         private String syscpu;//系统cpu
         private String sysmem;//系统内存
+        private String status;//自动控制开关
+
+        public String getStatus() {
+                return status;
+        }
+
+        public void setStatus(String status) {
+                this.status = status;
+        }
 
         public String getSyscpu() {
                 return syscpu;

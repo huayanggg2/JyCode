@@ -2,6 +2,7 @@ package com.example.demo.dao;
 
 import com.example.demo.model.Jydata;
 import com.example.demo.model.Jydetail;
+import com.example.demo.model.Jysystm;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -21,4 +22,6 @@ public interface JydataDao {
     void setSer(@Param("ljd") List<Jydetail> ljd);
 
     List<Jydetail> searchOne(String dasn, String serapi);
+
+    List<Jysystm> getSystm();
 }

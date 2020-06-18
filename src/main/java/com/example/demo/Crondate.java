@@ -64,7 +64,7 @@ public class Crondate {
                 JSONObject jo = ja.getJSONObject(i);
                 int jycount = (int) jo.getLong("_calc_val");
                 jydata.setJycount(jycount);
-                jydata.setJysystm("社保医疗");
+                jydata.setJysystm("sbyl");
             }
         } catch (IOException e) {
             e.printStackTrace();

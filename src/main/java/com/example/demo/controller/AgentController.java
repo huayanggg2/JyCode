@@ -1,7 +1,7 @@
 package com.example.demo.controller;
 
 import ch.ethz.ssh2.Connection;
-import com.alibaba.fastjson.JSONException;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.example.demo.alltools.Jshell;
 import com.example.demo.model.Agentpmfc;
@@ -92,26 +92,23 @@ public class AgentController {
     public Map<String, Object> agentStart(@RequestBody String allips){
         Map<String, Object> resultMap = new HashMap<String, Object>();
         JSONObject ob = JSONObject.parseObject(allips);
-        String hostip = ob.getJSONObject("bizContent").getString("hostip");
+       // String hostip = ob.getJSONObject("bizContent").getString("hostip");
+        JSONArray iparr = ob.getJSONObject("bizContent").getJSONArray("hostip");
         String execmd = ob.getJSONObject("bizContent").getString("execmd");
-        String[] iparr = hostip.split(",");
         Sshhost sshhost = new Sshhost();
-      //  List<String> lst = new ArrayList<String>();
         Jshell jshell = new Jshell();
         Connection conn = null;
         sshhost.setUsername("log");
         sshhost.setPassword("log");
         String result = "";
-        for (int i = 0; i < iparr.length; i++) {
-            sshhost.setHostip(iparr[i]);
+        for (int i = 0; i < iparr.size(); i++) {
+            sshhost.setHostip((String) iparr.get(i));
             conn = jshell.login(sshhost);
             String cmd = "cd /home/log/loginsight-agent/VxLogSideCar/ && sh vxlog-server.sh "+execmd +" >/dev/null && ps -ef|grep VxLog|grep -v grep|wc -l";
             result = jshell.execute(conn,cmd);
-            System.out.println(result);
-         //  lst.add(result);
         }
         try {
-            Thread.sleep(7000);
+            Thread.sleep(6000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

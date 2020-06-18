@@ -18,7 +18,8 @@
  -->
     </resultMap>
     <resultMap type="com.example.demo.model.Agentpmfc" id="pmfcmap">
-        <result property="ahostip" column="ahtp"/>
+        <result column="ahtp" property="ahostip"/>
+        <result column="atcl" property="status"/>
         <result column="hcdp" property="acsdeip"/>
         <result column="hatn" property="asvn"/>
         <result column="avts" property="vxstatus"/>
@@ -32,7 +33,7 @@
         select sysgp, gpsn, count(hostip) as hipcnt, sum(vxstatus) as runproces from
         (select sysgp, hostdtl.hgpsn gpsn, hostip from sysname left join hostdtl on sysname.gpsn = hostdtl.hgpsn )d
         left join
-        (select a.ahostip,a.vxstatus from agentpmfc a,(SELECT ahostip,MAX(checktime) checktime FROM agentpmfc GROUP BY
+        (select a.ahostip,a.vxstatus from realtime a,(SELECT ahostip,MAX(checktime) checktime FROM realtime GROUP BY
         ahostip) c
         WHERE a.checktime = c.checktime AND a.ahostip = c.ahostip AND a.vxstatus = 1) b
         on d.hostip = b.ahostip
@@ -41,18 +42,18 @@
 
     <select id="selectBysystm" resultMap="pmfcmap" parameterType="string">
         SELECT htl.hostip ahtp,htl.csdeip hcdp,htl.agentvsn hatn,atc.vxstatus avts,atc.cpu acpu,atc.mem
-        amem,atc.syscpu asyscpu,atc.sysmem asysmem FROM hostdtl htl
-        LEFT JOIN (SELECT a.* FROM agentpmfc a, (SELECT ahostip,MAX(checktime) checktime FROM agentpmfc GROUP BY
+        amem,atc.syscpu asyscpu,atc.sysmem asysmem,atc.autoctl atcl FROM hostdtl htl
+        LEFT JOIN (SELECT a.* FROM realtime a, (SELECT ahostip,MAX(checktime) checktime FROM realtime GROUP BY
         ahostip) b
         WHERE a.checktime = b.checktime AND a.ahostip = b.ahostip) atc ON htl.hostip = atc.ahostip WHERE htl.hgpsn =
         #{gpsn}
     </select>
 
-    <select id="selectByIp" resultType="com.example.demo.model.Agentpmfc">
-        SELECT htl.hostip,c.acsdeip,htl.agentvsn,c.vxstatus vxstatus,c.cpu
-        cpu,c.mem
-        mem,c.syscpu syscpu,c.sysmem sysmem FROM hostdtl htl INNER JOIN (SELECT a.* FROM agentpmfc a, (SELECT
-        ahostip,MAX(checktime) checktime FROM agentpmfc GROUP BY ahostip) b WHERE a.checktime = b.checktime AND
+    <select id="selectByIp" resultMap="pmfcmap">
+        SELECT htl.hostip ahtp,c.acsdeip hcdp,htl.agentvsn hatn,c.vxstatus avts,c.cpu
+        acpu,c.mem
+        amem,c.syscpu asyscpu,c.sysmem asysmem,c.autoctl atcl FROM hostdtl htl INNER JOIN (SELECT a.* FROM realtime a, (SELECT
+        ahostip,MAX(checktime) checktime FROM realtime GROUP BY ahostip) b WHERE a.checktime = b.checktime AND
         a.ahostip = b.ahostip) c on htl.hostip = c.ahostip WHERE htl.hostip in
         <foreach collection="array" item="hostip" index="index"
                  open="(" close=")" separator=",">
@@ -64,15 +65,15 @@
             #{hostip}
         </foreach>
     </select>
-    <select id="selectCpu" resultType="com.example.demo.model.Agentpmfc">
+    <select id="selectCpu" resultType="string">
         SELECT cpu FROM agentpmfc WHERE ahostip = #{hostip} AND checktime >= DATE_ADD(now(),INTERVAL
         #{period} MINUTE)
     </select>
-    <select id="selectMem" resultType="com.example.demo.model.Agentpmfc">
+    <select id="selectMem" resultType="string">
         SELECT mem FROM agentpmfc WHERE ahostip = #{hostip} AND checktime >= DATE_ADD(now(),INTERVAL
         #{period} MINUTE)
     </select>
     <select id="selectAllip" resultType="string" parameterType="string">
-        SELECT hostip FROM `hostdtl` WHERE hgpsn = #{gpsn}
+        SELECT hostip FROM hostdtl WHERE hgpsn = #{gpsn}
     </select>
 </mapper>

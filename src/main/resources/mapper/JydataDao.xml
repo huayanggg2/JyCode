@@ -3,25 +3,25 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <!-- 这里填写对应的Dao文件所在的路径 -->
 <mapper namespace="com.example.demo.dao.JydataDao">
-    <!-- 填写数据库里实例Person对应的表的表名 -->
-    <!-- <include refid="table" />-->
-    <!-- <sql id="table">testable</sql>-->
     <!--根目录下查询所有-->
     <select id="getAll" resultType="com.example.demo.model.Jydata">
         SELECT
-        *
-        FROM testable order by jytime
+        tb.jyid jyid,tb.jytime jytime,tb.jycount jycount,tb.dasn dasn,sne.sysgp jysystm
+        FROM testable tb LEFT JOIN sysname sne ON tb.sgpsn = sne.gpsn order by tb.jytime
+    </select>
+    <select id="getSystm" resultType="com.example.demo.model.Jysystm">
+        SELECT * FROM sysname
     </select>
     <!--通过时间段和交易系统查询-->
     <select id="getBytime" resultType="com.example.demo.model.Jydata">
-        select * from
-        testable
+        SELECT tb.jyid jyid,tb.jytime jytime,tb.jycount jycount,tb.dasn dasn,sne.sysgp jysystm
+        from testable tb LEFT JOIN sysname sne ON tb.sgpsn = sne.gpsn
         <where>
             <if test="begtime != null and endtime != null and begtime != '' and endtime != ''">
                 jytime &gt;= #{begtime} and jytime &lt; #{endtime}
             </if>
             <if test="jysystm != 'all'">
-                and jysystm = #{jysystm}
+                and sgpsn = #{jysystm}
             </if>
         </where>
         order by jytime
