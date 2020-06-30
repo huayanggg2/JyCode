@@ -11,4 +11,6 @@ spring:
 mybatis:
   mapper-locations: classpath:mapper/*.xml
 
-
+crontest:
+  cron1: 0/5 * * * * ?
+  cron2: 0 0 2 * * ?
