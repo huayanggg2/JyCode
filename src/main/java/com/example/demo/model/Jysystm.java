@@ -4,6 +4,24 @@ public class Jysystm {
     private int id;
     private String sysgp;
     private String gpsn;
+    private String cpuValue;
+    private boolean ifdsab;
+
+    public boolean isIfdsab() {
+        return ifdsab;
+    }
+
+    public void setIfdsab(boolean ifdsab) {
+        this.ifdsab = ifdsab;
+    }
+
+    public String getCpuValue() {
+        return cpuValue;
+    }
+
+    public void setCpuValue(String cpuValue) {
+        this.cpuValue = cpuValue;
+    }
 
     public int getId() {
         return id;

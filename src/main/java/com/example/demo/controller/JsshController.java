@@ -25,9 +25,11 @@ public class JsshController {
         JSONObject ob = JSONObject.parseObject(json);
         String username = ob.getJSONObject("bizContent").getString("username");
         String hostip = ob.getJSONObject("bizContent").getString("hostip");
+        String csdeip = ob.getJSONObject("bizContent").getString("csdeip");
         String password = ob.getJSONObject("bizContent").getString("password");
         String logdir = ob.getJSONObject("bizContent").getString("logdir");
-        String[] iparr = hostip.split(",");//将hostip拆分成数组
+        String[] hostarr = hostip.split(",");//将hostip拆分成数组
+        String[] csdearr = csdeip.split(",");//将hostip拆分成数组
         List<String> lst = new ArrayList<String>();
         Sshhost sshhost = new Sshhost();
         Jshell jshell = new Jshell();
@@ -35,16 +37,16 @@ public class JsshController {
         Map<String, Object> resultMap = new HashMap<String, Object>();
         sshhost.setUsername(username);
         sshhost.setPassword(password);
-        if (iparr.length > 1) {//当ip个数大于1时
+        if (hostarr.length > 1) {//当ip个数大于1时
             String[] result;
             String lastres;
-            for (int i = 0; i < iparr.length; i++) {
-                sshhost.setHostip(iparr[i]);
+            for (int i = 0; i < hostarr.length; i++) {
+                sshhost.setHostip(hostarr[i]);
                 conn = jshell.login(sshhost);
-                String cmd = "cd /home && unzip logtool.zip>/dev/null && sh /home/logtool/vxlog.sh " + iparr[i] + " " + logdir;
+                String cmd = "cd /home && unzip logtool.zip>/dev/null && sh /home/logtool/vxlog.sh " + csdearr[i] + " " + logdir;
                 jshell.scpagt("E:/logtool.zip","/home/",conn);
                 result = jshell.execute(conn,cmd).split("\n");
-                lastres = iparr[i] + " " + result[result.length - 1];
+                lastres = hostarr[i] + " " + result[result.length - 1];
                 lst.add(lastres);
         }
             resultMap.put("status", "0000");
@@ -54,7 +56,7 @@ public class JsshController {
         } else {//当ip个数为1时
             sshhost.setHostip(hostip);
             conn = jshell.login(sshhost);
-            String cmd = "cd /home && unzip logtool.zip>/dev/null && sh /home/logtool/vxlog.sh " + hostip + " " + logdir;
+            String cmd = "cd /home && unzip logtool.zip>/dev/null && sh /home/logtool/vxlog.sh " + csdeip + " " + logdir;
             jshell.scpagt("E:/logtool.zip","/home/",conn);
             String pattn = ".*失败.*";
             List<JSONObject> jlst = new ArrayList();

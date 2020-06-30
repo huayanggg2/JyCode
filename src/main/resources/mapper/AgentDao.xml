@@ -52,7 +52,8 @@
     <select id="selectByIp" resultMap="pmfcmap">
         SELECT htl.hostip ahtp,c.acsdeip hcdp,htl.agentvsn hatn,c.vxstatus avts,c.cpu
         acpu,c.mem
-        amem,c.syscpu asyscpu,c.sysmem asysmem,c.autoctl atcl FROM hostdtl htl INNER JOIN (SELECT a.* FROM realtime a, (SELECT
+        amem,c.syscpu asyscpu,c.sysmem asysmem,c.autoctl atcl FROM hostdtl htl INNER JOIN (SELECT a.* FROM realtime a,
+        (SELECT
         ahostip,MAX(checktime) checktime FROM realtime GROUP BY ahostip) b WHERE a.checktime = b.checktime AND
         a.ahostip = b.ahostip) c on htl.hostip = c.ahostip WHERE htl.hostip in
         <foreach collection="array" item="hostip" index="index"
@@ -66,14 +67,17 @@
         </foreach>
     </select>
     <select id="selectCpu" resultType="string">
-        SELECT cpu FROM agentpmfc WHERE ahostip = #{hostip} AND checktime >= DATE_ADD(now(),INTERVAL
-        #{period} MINUTE)
+        SELECT cpu FROM agentpmfc WHERE ahostip = #{hostip} ORDER BY id DESC LIMIT 0,#{period}
+        <!--SELECT cpu FROM agentpmfc WHERE ahostip = #{hostip} AND checktime >= DATE_ADD(now(),INTERVAL
+        #{period} MINUTE)-->
     </select>
     <select id="selectMem" resultType="string">
-        SELECT mem FROM agentpmfc WHERE ahostip = #{hostip} AND checktime >= DATE_ADD(now(),INTERVAL
-        #{period} MINUTE)
+        SELECT mem FROM agentpmfc WHERE ahostip = #{hostip} ORDER BY id DESC LIMIT 0,#{period}
     </select>
     <select id="selectAllip" resultType="string" parameterType="string">
         SELECT hostip FROM hostdtl WHERE hgpsn = #{gpsn}
+    </select>
+    <select id="setCpuwarn" parameterType="string">
+        UPDATE sysname SET cpuValue = #{cpuValue} WHERE gpsn = #{gpsn}
     </select>
 </mapper>

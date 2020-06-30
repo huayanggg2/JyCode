@@ -5,6 +5,8 @@ import com.example.demo.model.Jydata;
 import com.example.demo.model.Jydetail;
 import com.example.demo.model.Jysystm;
 import com.example.demo.service.JydataService;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -20,16 +22,27 @@ public class JydataController {
     JydataService jydataService;
     @ResponseBody
     @RequestMapping("/findjyl/selectAlljy")//查询所有
-    public Map<String, Object> selectAlljy() {
+    public Map<String, Object> selectAlljy(@RequestBody String json) {
+        JSONObject ob = JSONObject.parseObject(json);
+        int currentPage = ob.getJSONObject("bizContent").getInteger("currentPage");
+        int pageSize = ob.getJSONObject("bizContent").getInteger("pageSize");
         Map<String, Object> resultMap = new HashMap<String, Object>();
+        PageHelper.startPage(currentPage,pageSize);
         try {
             List<Jydata> jylist = jydataService.getAll();
             List<Jysystm>  syslist = jydataService.getSystm();
+            Jysystm jstm = new Jysystm();
+            jstm.setGpsn("all");
+            jstm.setId(syslist.size()+1);
+            jstm.setSysgp("所有系统");
+            syslist.add(0,jstm);
+            PageInfo<Jydata> pageInfo = new PageInfo<Jydata>(jylist);
             if (jylist.size() > 0) {
                 resultMap.put("status", "0000");
                 resultMap.put("message", "成功");
-                resultMap.put("jylist", jylist);
                 resultMap.put("syslist", syslist);
+                resultMap.put("jylist", pageInfo.getList());
+                resultMap.put("pages",pageInfo.getTotal());
             } else {
                 resultMap.put("code", 1);
             }
@@ -43,16 +56,21 @@ public class JydataController {
     @RequestMapping("/findjyl/findbydate")//根据时间段和交易名称查询
     public Map<String, Object> findbydate(@RequestBody String json) {
         JSONObject ob = JSONObject.parseObject(json);
+        int currentPage = ob.getJSONObject("bizContent").getInteger("currentPage");
+        int pageSize = ob.getJSONObject("bizContent").getInteger("pageSize");
         String begtime = ob.getJSONObject("bizContent").getString("begtime");
         String endtime = ob.getJSONObject("bizContent").getString("endtime");
         String jysystm = ob.getJSONObject("bizContent").getString("jysystm");
+        PageHelper.startPage(currentPage,pageSize);
         Map<String, Object> resultMap = new HashMap<String, Object>();
         try {
             List<Jydata> datelist = jydataService.getBytime(begtime, endtime, jysystm);
+            PageInfo<Jydata> pageInfo = new PageInfo<Jydata>(datelist);
             if (datelist.size() > 0) {
                 resultMap.put("status", "0000");
                 resultMap.put("message", "成功");
-                resultMap.put("datelist", datelist);
+                resultMap.put("datelist", pageInfo.getList());
+                resultMap.put("pages",pageInfo.getTotal());
             } else {
                 resultMap.put("code", 1);
             }
@@ -66,14 +84,19 @@ public class JydataController {
     @RequestMapping("/findjyl/getDetail")//根据dasn查询单条交易量的详细信息
     public Map<String, Object> getDetail(@RequestBody String json) {
         JSONObject ob = JSONObject.parseObject(json);
+        int currentPage = ob.getJSONObject("bizContent").getInteger("currentPage");
+        int pageSize = ob.getJSONObject("bizContent").getInteger("pageSize");
         String dasn = ob.getJSONObject("bizContent").getString("dasn");
         Map<String, Object> resultMap = new HashMap<String, Object>();
+        PageHelper.startPage(currentPage,pageSize);
         try {
             List<Jydetail> delist = jydataService.getDetail(dasn);
+            PageInfo<Jydetail> pageInfo = new PageInfo<Jydetail>(delist);
             if (delist.size() > 0) {
                 resultMap.put("status", "0000");
                 resultMap.put("message", "成功");
-                resultMap.put("delist", delist);
+                resultMap.put("delist", pageInfo.getList());
+                resultMap.put("pages",pageInfo.getTotal());
             } else {
                 resultMap.put("code", 1);
             }

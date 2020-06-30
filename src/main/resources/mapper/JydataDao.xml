@@ -18,7 +18,7 @@
         from testable tb LEFT JOIN sysname sne ON tb.sgpsn = sne.gpsn
         <where>
             <if test="begtime != null and endtime != null and begtime != '' and endtime != ''">
-                jytime &gt;= #{begtime} and jytime &lt; #{endtime}
+                jytime &gt;= #{begtime} and jytime &lt;= #{endtime}
             </if>
             <if test="jysystm != 'all'">
                 and sgpsn = #{jysystm}
@@ -31,7 +31,7 @@
     <insert id="setAll" parameterType="com.example.demo.model.Jydata">
         INSERT INTO
         testable
-        (jysystm,jytime,jycount,dasn)
+        (sgpsn,jytime,jycount,dasn)
         VALUES
         (#{jysystm},#{jytime},#{jycount},#{dasn})
     </insert>
@@ -61,7 +61,7 @@
         where
         dasn = #{dasn}
         <if test="serapi != '' and serapi != null">
-            and serapi = #{serapi}
+            and serapi like "%"#{serapi}"%"
         </if>
     </select>
 </mapper>

@@ -24,15 +24,19 @@ public class AgentService {
         return agentDao.selectByIp(iparr);
     }
 
-    public List selectCpu(String hostip, String period) {
+    public List selectCpu(String hostip, int period) {
         return agentDao.selectCpu(hostip,period);
     }
 
-    public List selectMem(String hostip, String period) {
+    public List selectMem(String hostip, int period) {
         return agentDao.selectMem(hostip,period);
     }
 
     public List<String> selectAllip(String gpsn) {
         return agentDao.selectAllip(gpsn);
+    }
+
+    public void setCpuwarn(String gpsn, String cpuValue) {
+        agentDao.setCpuwarn(gpsn,cpuValue);
     }
 }

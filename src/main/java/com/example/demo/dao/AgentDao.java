@@ -14,9 +14,11 @@ public interface AgentDao {
 
     List<Agentpmfc> selectByIp(String[] iparr);
 
-    List selectCpu(String hostip, String period);
+    List selectCpu(String hostip, int period);
 
-    List selectMem(String hostip, String period);
+    List selectMem(String hostip, int period);
 
     List<String> selectAllip(String gpsn);
+
+    void setCpuwarn(String gpsn, String cpuValue);
 }
