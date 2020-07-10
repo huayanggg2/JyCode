@@ -1,7 +1,7 @@
 package com.example.demo.dao;
 
-import com.example.demo.model.Agentpmfc;
-import com.example.demo.model.Agentsystm;
+import com.example.demo.model.agent.Agentpmfc;
+import com.example.demo.model.agent.Agentsystm;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;

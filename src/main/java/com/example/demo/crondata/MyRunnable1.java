@@ -4,8 +4,8 @@ package com.example.demo.crondata;
 import com.example.demo.alltools.GetDatetime;
 import com.example.demo.alltools.HttpConn;
 import com.example.demo.dao.JydataDao;
-import com.example.demo.model.Jydata;
-import com.example.demo.model.Jydetail;
+import com.example.demo.model.jysys.Jydata;
+import com.example.demo.model.jysys.Jydetail;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -16,16 +16,22 @@ import java.util.ArrayList;
 import java.util.List;
 @Component
 public class MyRunnable1 implements Runnable{
+    private String apiurl;
+    private String sysgp;
+
     private static JydataDao jydataDao;
     @Autowired
     public MyRunnable1(JydataDao jydataDao) {
         MyRunnable1.jydataDao = jydataDao;
     }
 
+    public MyRunnable1(String apiurl,String sysgp) {
+            this.apiurl=apiurl;
+            this.sysgp=sysgp;
+    }
     public MyRunnable1() {
 
     }
-
     @Override
     public void run() {
         Jydata jydata = new Jydata();

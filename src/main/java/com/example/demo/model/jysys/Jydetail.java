@@ -1,6 +1,16 @@
-package com.example.demo.model;
+package com.example.demo.model.jysys;
 
 public class Jydetail {
+    private int id;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
     private String dasn;
     private int suces;
     private int fails;

@@ -4,8 +4,8 @@ import ch.ethz.ssh2.Connection;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.example.demo.alltools.Jshell;
-import com.example.demo.model.Jysystm;
-import com.example.demo.model.Sshhost;
+import com.example.demo.model.jysys.Jysystm;
+import com.example.demo.model.agent.Sshhost;
 import com.example.demo.service.AgentService;
 import com.example.demo.service.JydataService;
 import com.github.pagehelper.PageHelper;
@@ -103,11 +103,10 @@ public class AutoctlController {
         return resultMap;
     }
 
-    @ResponseBody//高峰时段停止自愈
+   /* @ResponseBody//高峰时段停止自愈
     @PostMapping(value = "/site/stopAuto", produces = "application/json;charset=UTF-8")
     public Map<String,Object> stopAuto(@RequestBody String json) {
         Map<String, Object> resultMap = new HashMap<String, Object>();
         return resultMap;
-
-    }
+    }*/
 }

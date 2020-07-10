@@ -3,13 +3,13 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <!-- 这里填写对应的Dao文件所在的路径 -->
 <mapper namespace="com.example.demo.dao.AgentDao">
-    <resultMap type="com.example.demo.model.Agentsystm" id="agentmap">
+    <resultMap type="com.example.demo.model.agent.Agentsystm" id="agentmap">
         <result property="sysgp" column="sysgp"/>
         <result property="gpsn" column="gpsn"/>
         <result column="hipcnt" property="ipcnt"/>
         <result column="runproces" property="runproces"/>
         <!--一一对多查询-->
-        <!-- <collection property="hostdtls" ofType="com.example.demo.model.Hostdtl">
+        <!-- <collection property="hostdtls" ofType="com.example.demo.model.agent.Hostdtl">
              <id column="hgpsn" property="hgpsn"/>
              <result column="csdeip" property="csdeip"/>
              <result column="agentvsn" property="agentvsn"/>
@@ -17,7 +17,7 @@
          </collection>
  -->
     </resultMap>
-    <resultMap type="com.example.demo.model.Agentpmfc" id="pmfcmap">
+    <resultMap type="com.example.demo.model.agent.Agentpmfc" id="pmfcmap">
         <result column="ahtp" property="ahostip"/>
         <result column="atcl" property="status"/>
         <result column="hcdp" property="acsdeip"/>
@@ -29,7 +29,7 @@
         <result column="asysmem" property="sysmem"/>
     </resultMap>
 
-    <select id="selectsystem" resultMap="agentmap">
+    <select id="selectsystem" resultMap="agentmap"><!--查看各个系统服务器数量，进程运行数量-->
         select sysgp, gpsn, count(hostip) as hipcnt, sum(vxstatus) as runproces from
         (select sysgp, hostdtl.hgpsn gpsn, hostip from sysname left join hostdtl on sysname.gpsn = hostdtl.hgpsn )d
         left join
@@ -40,7 +40,7 @@
         group by sysgp, gpsn
     </select>
 
-    <select id="selectBysystm" resultMap="pmfcmap" parameterType="string">
+    <select id="selectBysystm" resultMap="pmfcmap" parameterType="string"><!--查询某个系统所有服务器状态-->
         SELECT htl.hostip ahtp,htl.csdeip hcdp,htl.agentvsn hatn,atc.vxstatus avts,atc.cpu acpu,atc.mem
         amem,atc.syscpu asyscpu,atc.sysmem asysmem,atc.autoctl atcl FROM hostdtl htl
         LEFT JOIN (SELECT a.* FROM realtime a, (SELECT ahostip,MAX(checktime) checktime FROM realtime GROUP BY
@@ -49,7 +49,7 @@
         #{gpsn}
     </select>
 
-    <select id="selectByIp" resultMap="pmfcmap">
+    <select id="selectByIp" resultMap="pmfcmap"><!--根据Ip搜索某个服务器数据-->
         SELECT htl.hostip ahtp,c.acsdeip hcdp,htl.agentvsn hatn,c.vxstatus avts,c.cpu
         acpu,c.mem
         amem,c.syscpu asyscpu,c.sysmem asysmem,c.autoctl atcl FROM hostdtl htl INNER JOIN (SELECT a.* FROM realtime a,
@@ -77,7 +77,7 @@
     <select id="selectAllip" resultType="string" parameterType="string">
         SELECT hostip FROM hostdtl WHERE hgpsn = #{gpsn}
     </select>
-    <select id="setCpuwarn" parameterType="string">
+    <update id="setCpuwarn" parameterType="string">
         UPDATE sysname SET cpuValue = #{cpuValue} WHERE gpsn = #{gpsn}
-    </select>
+    </update>
 </mapper>

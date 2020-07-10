@@ -1,4 +1,4 @@
-package com.example.demo.model;
+package com.example.demo.model.agent;
 
 public class Agentpmfc {
         private String acsdeip;//通信ip

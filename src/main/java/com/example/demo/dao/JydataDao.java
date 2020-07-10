@@ -1,8 +1,8 @@
 package com.example.demo.dao;
 
-import com.example.demo.model.Jydata;
-import com.example.demo.model.Jydetail;
-import com.example.demo.model.Jysystm;
+import com.example.demo.model.jysys.Jydata;
+import com.example.demo.model.jysys.Jydetail;
+import com.example.demo.model.jysys.Jysystm;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 

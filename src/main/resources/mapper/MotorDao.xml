@@ -2,10 +2,18 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <!-- 这里填写对应的Dao文件所在的路径 -->
-<mapper namespace="com.example.demo.dao.MotorDao"    >
-    <select id="getmonitor" resultType="com.example.demo.model.Motor" >
-        SELECT
-        *
-        FROM monitorck order by cktime
+<mapper namespace="com.example.demo.dao.MotorDao">
+    <select id="getMonitorBytime" resultType="com.example.demo.model.server.Serverdtl">
+        SELECT * FROM serverdtl where checktime &gt;= #{begintime} and checktime &lt;= #{endtime}
+    </select>
+    <select id="getcpuByip" resultType="com.example.demo.model.server.Serverdtl">
+        SELECT syscpu,checktime FROM serverdtl where serverip = #{ahostip} and checktime &gt;= #{begintime} and checktime &lt;= #{endtime}
+    </select>
+
+    <select id="getmemByip" resultType="com.example.demo.model.server.Serverdtl">
+        SELECT sysmem,checktime FROM serverdtl where serverip = #{ahostip} and checktime &gt;= #{begintime} and checktime &lt;= #{endtime}
+    </select>
+    <select id="getallnode" resultType="com.example.demo.model.server.Copnts">
+        SELECT * FROM serdate
     </select>
 </mapper>

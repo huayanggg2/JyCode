@@ -4,16 +4,16 @@
 <!-- 这里填写对应的Dao文件所在的路径 -->
 <mapper namespace="com.example.demo.dao.JydataDao">
     <!--根目录下查询所有-->
-    <select id="getAll" resultType="com.example.demo.model.Jydata">
+    <select id="getAll" resultType="com.example.demo.model.jysys.Jydata">
         SELECT
         tb.jyid jyid,tb.jytime jytime,tb.jycount jycount,tb.dasn dasn,sne.sysgp jysystm
         FROM testable tb LEFT JOIN sysname sne ON tb.sgpsn = sne.gpsn order by tb.jytime
     </select>
-    <select id="getSystm" resultType="com.example.demo.model.Jysystm">
+    <select id="getSystm" resultType="com.example.demo.model.jysys.Jysystm">
         SELECT * FROM sysname
     </select>
     <!--通过时间段和交易系统查询-->
-    <select id="getBytime" resultType="com.example.demo.model.Jydata">
+    <select id="getBytime" resultType="com.example.demo.model.jysys.Jydata">
         SELECT tb.jyid jyid,tb.jytime jytime,tb.jycount jycount,tb.dasn dasn,sne.sysgp jysystm
         from testable tb LEFT JOIN sysname sne ON tb.sgpsn = sne.gpsn
         <where>
@@ -28,7 +28,7 @@
     </select>
 
     <!-- 增加交易信息 -->
-    <insert id="setAll" parameterType="com.example.demo.model.Jydata">
+    <insert id="setAll" parameterType="com.example.demo.model.jysys.Jydata">
         INSERT INTO
         testable
         (sgpsn,jytime,jycount,dasn)
@@ -46,14 +46,14 @@
         </foreach>
     </insert>
     <!--查询某个系统某个时间段的交易详情-->
-    <select id="getDetail" parameterType="string" resultType="com.example.demo.model.Jydetail">
+    <select id="getDetail" parameterType="string" resultType="com.example.demo.model.jysys.Jydetail">
         SELECT
         *
         FROM
         perhour where dasn = #{dasn}
     </select>
     <!--根据serviceapi查询-->
-    <select id="searchOne" parameterType="string" resultType="com.example.demo.model.Jydetail">
+    <select id="searchOne" parameterType="string" resultType="com.example.demo.model.jysys.Jydetail">
         SELECT
         *
         FROM

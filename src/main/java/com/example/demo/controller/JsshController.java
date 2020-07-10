@@ -4,10 +4,9 @@ import ch.ethz.ssh2.Connection;
 import com.alibaba.fastjson.JSONException;
 import com.alibaba.fastjson.JSONObject;
 import com.example.demo.alltools.Jshell;
-import com.example.demo.model.Sshhost;
+import com.example.demo.model.agent.Sshhost;
 
-import com.example.demo.service.AgentService;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,8 +16,9 @@ import java.util.regex.Pattern;
 
 @Controller
 public class JsshController {
-    @Autowired
-    AgentService agentService;
+    @Value("${liagent.agtpath}")
+    private String filepath;
+
     @ResponseBody//部署agent
     @PostMapping(value = "/jssh/sshLogin",produces = "application/json;charset=UTF-8")
     public Map<String,Object> sshLogin(@RequestBody String json) throws JSONException {
@@ -40,11 +40,12 @@ public class JsshController {
         if (hostarr.length > 1) {//当ip个数大于1时
             String[] result;
             String lastres;
-            for (int i = 0; i < hostarr.length; i++) {
+            for (int i = 0,hlt = hostarr.length;i < hlt; i++) {
                 sshhost.setHostip(hostarr[i]);
                 conn = jshell.login(sshhost);
                 String cmd = "cd /home && unzip logtool.zip>/dev/null && sh /home/logtool/vxlog.sh " + csdearr[i] + " " + logdir;
-                jshell.scpagt("E:/logtool.zip","/home/",conn);
+                //jshell.scpagt("E:/logtool.zip","/home/",conn);
+                jshell.scpagt(filepath,"/home/",conn);
                 result = jshell.execute(conn,cmd).split("\n");
                 lastres = hostarr[i] + " " + result[result.length - 1];
                 lst.add(lastres);
@@ -57,7 +58,8 @@ public class JsshController {
             sshhost.setHostip(hostip);
             conn = jshell.login(sshhost);
             String cmd = "cd /home && unzip logtool.zip>/dev/null && sh /home/logtool/vxlog.sh " + csdeip + " " + logdir;
-            jshell.scpagt("E:/logtool.zip","/home/",conn);
+            //jshell.scpagt("E:/logtool.zip","/home/",conn);
+            jshell.scpagt(filepath,"/home/",conn);
             String pattn = ".*失败.*";
             List<JSONObject> jlst = new ArrayList();
 

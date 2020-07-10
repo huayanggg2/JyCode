@@ -1,4 +1,4 @@
-package com.example.demo;
+package com.example.demo.config;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -8,7 +8,6 @@ import org.springframework.stereotype.Component;
 /**
  * Created by Administrator on 2019/8/5.
  */
-@Data
 @Component
 @ConfigurationProperties(prefix="crontest")
 @EqualsAndHashCode(callSuper = false)

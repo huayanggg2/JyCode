@@ -4,9 +4,9 @@ import ch.ethz.ssh2.Connection;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.example.demo.alltools.Jshell;
-import com.example.demo.model.Agentpmfc;
-import com.example.demo.model.Agentsystm;
-import com.example.demo.model.Sshhost;
+import com.example.demo.model.agent.Agentpmfc;
+import com.example.demo.model.agent.Agentsystm;
+import com.example.demo.model.agent.Sshhost;
 import com.example.demo.service.AgentService;
 
 import com.github.pagehelper.PageHelper;
@@ -63,11 +63,13 @@ public class AgentController {
         PageHelper.startPage(currentPage,pageSize);
         try {
             List<Agentpmfc> agtlst = agentService.selectBysystm(gpsn);
+            List<Agentpmfc> allagt = agentService.selectBysystm(gpsn);
             PageInfo<Agentpmfc> pageInfo = new PageInfo<Agentpmfc>(agtlst);
             if (agtlst.size() > 0) {
                 resultMap.put("status", "0000");
                 resultMap.put("message", "成功");
                 resultMap.put("agtlst", pageInfo.getList());
+                resultMap.put("allagt", allagt);
                 resultMap.put("pages",pageInfo.getTotal());
             } else {
                 resultMap.put("code", 1);
@@ -114,7 +116,7 @@ public class AgentController {
         sshhost.setUsername("log");
         sshhost.setPassword("log");
         String result = "";
-        for (int i = 0; i < iparr.size(); i++) {
+        for (int i = 0,ipse = iparr.size(); i <ipse; i++) {
             sshhost.setHostip((String) iparr.get(i));
             conn = jshell.login(sshhost);
             String cmd = "cd /home/log/loginsight-agent/VxLogSideCar/ && sh vxlog-server.sh "+execmd +" >/dev/null && ps -ef|grep VxLog|grep -v grep|wc -l";

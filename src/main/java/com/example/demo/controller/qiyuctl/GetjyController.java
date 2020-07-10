@@ -1,7 +1,7 @@
-package com.example.demo.controller.crontabs;
+package com.example.demo.controller.qiyuctl;
 
 
-import com.example.demo.CronTestConfiguration;
+import com.example.demo.config.CronTestConfiguration;
 import com.example.demo.crondata.MyRunnable1;
 import com.example.demo.crondata.MyRunnable2;
 import io.swagger.annotations.Api;
@@ -54,7 +54,9 @@ public class GetjyController {
     @ApiOperation("开始定时任务1")
     public void startCron1() {
 
-        future1 = threadPoolTaskScheduler.schedule(new MyRunnable1(),new Trigger(){
+        String apiurl = null;
+        String sysgp = null;
+        future1 = threadPoolTaskScheduler.schedule(new MyRunnable1(apiurl,sysgp),new Trigger(){
             @Override
             public Date nextExecutionTime(TriggerContext triggerContext){
                 return new CronTrigger(cronTestConfiguration.getCron1()).nextExecutionTime(triggerContext);

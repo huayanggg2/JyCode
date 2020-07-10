@@ -1,4 +1,4 @@
-package com.example.demo.model;
+package com.example.demo.model.jysys;
 
 public class Jysystm {
     private int id;

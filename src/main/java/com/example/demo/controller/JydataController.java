@@ -1,9 +1,9 @@
 package com.example.demo.controller;
 
 import com.alibaba.fastjson.JSONObject;
-import com.example.demo.model.Jydata;
-import com.example.demo.model.Jydetail;
-import com.example.demo.model.Jysystm;
+import com.example.demo.model.jysys.Jydata;
+import com.example.demo.model.jysys.Jydetail;
+import com.example.demo.model.jysys.Jysystm;
 import com.example.demo.service.JydataService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -30,6 +30,7 @@ public class JydataController {
         PageHelper.startPage(currentPage,pageSize);
         try {
             List<Jydata> jylist = jydataService.getAll();
+            List<Jydata> alljy = jydataService.getAll();
             List<Jysystm>  syslist = jydataService.getSystm();
             Jysystm jstm = new Jysystm();
             jstm.setGpsn("all");
@@ -41,6 +42,7 @@ public class JydataController {
                 resultMap.put("status", "0000");
                 resultMap.put("message", "成功");
                 resultMap.put("syslist", syslist);
+                resultMap.put("alljy",alljy);
                 resultMap.put("jylist", pageInfo.getList());
                 resultMap.put("pages",pageInfo.getTotal());
             } else {
@@ -91,11 +93,13 @@ public class JydataController {
         PageHelper.startPage(currentPage,pageSize);
         try {
             List<Jydetail> delist = jydataService.getDetail(dasn);
+            List<Jydetail> allde = jydataService.getDetail(dasn);
             PageInfo<Jydetail> pageInfo = new PageInfo<Jydetail>(delist);
             if (delist.size() > 0) {
                 resultMap.put("status", "0000");
                 resultMap.put("message", "成功");
                 resultMap.put("delist", pageInfo.getList());
+                resultMap.put("allde", allde);
                 resultMap.put("pages",pageInfo.getTotal());
             } else {
                 resultMap.put("code", 1);

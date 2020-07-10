@@ -7,7 +7,7 @@ import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 
 import ch.ethz.ssh2.SCPClient;
-import com.example.demo.model.Sshhost;
+import com.example.demo.model.agent.Sshhost;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

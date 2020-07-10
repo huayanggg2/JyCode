@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<!-- 这里填写对应的Dao文件所在的路径 -->
+<mapper namespace="com.example.demo.dao.ServerDao">
+
+      <select id="getCopnts" resultType="com.example.demo.model.server.Copnts">
+          SELECT se.serverip serverip,se.nodemc nodemc,cs.zujian zujian,cs.zjstatus zjstatus FROM serdate se LEFT JOIN
+          copnts cs ON cs.serverip =
+          se.serverip
+      </select>
+    <select id="getServerdtl" resultType="com.example.demo.model.server.Serverdtl">
+        SELECT sdl.syscpu syscpu,sdl.sysmem sysmem,se.nodemc nodemc,se.serverip serverip FROM serverdtl sdl LEFT JOIN
+        serdate se ON se.serverip = sdl.serverip GROUP BY sdl.serverip
+    </select>
+
+    <!--<select id="getCopnts" resultType="com.example.demo.model.server.Nodesj">
+        SELECT se.nodemc nodemc,se.serverip serverip,cs.kafka kafka,cs.`es-9200` es,cs.loginsight loginsight,cs.mongodb
+        mongodb,cs.tomcat tomcat,cs.zookeeper zookeeper,stl.syscpu syscpu,stl.sysmem sysmem FROM serdate
+        se left JOIN serverdtl stl ON stl.serverip = se.serverip
+        LEFT JOIN copntscp cs ON se.serverip = cs.serverip GROUP BY stl.serverip
+    </select>-->
+</mapper>

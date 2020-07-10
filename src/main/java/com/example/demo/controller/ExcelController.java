@@ -1,6 +1,6 @@
 package com.example.demo.controller;
 
-import com.example.demo.model.Jydata;
+import com.example.demo.model.jysys.Jydata;
 import com.example.demo.service.JydataService;
 import org.apache.poi.ss.usermodel.HorizontalAlignment;
 import org.apache.poi.ss.usermodel.Picture;
