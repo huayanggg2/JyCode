@@ -1,9 +1,8 @@
 package com.example.demo.service;
 
-import com.example.demo.dao.JydataDao;
 import com.example.demo.dao.MotorDao;
-import com.example.demo.model.Motor;
 import com.example.demo.model.server.Copnts;
+import com.example.demo.model.server.Esmfc;
 import com.example.demo.model.server.Serverdtl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -29,5 +28,13 @@ public class MotorService {
 
     public List<Copnts> getallnode() {
         return motorDao.getallnode();
+    }
+
+    public List<Esmfc> selectAlles() {
+        return motorDao.selectAlles();
+    }
+
+    public List<Esmfc> selectesByIp(String[] iparr) {
+        return motorDao.selectesByIp(iparr);
     }
 }

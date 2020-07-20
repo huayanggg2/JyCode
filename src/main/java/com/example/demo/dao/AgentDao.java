@@ -12,7 +12,7 @@ public interface AgentDao {
 
     List<Agentpmfc> selectBysystm(String gpsn);
 
-    List<Agentpmfc> selectByIp(String[] iparr);
+    List<Agentpmfc> selectByIp(String[] iparr,String gpsn);
 
     List selectCpu(String hostip, int period);
 

@@ -1,4 +1,4 @@
-package com.example.demo.controller;
+package com.example.demo.controller.ezctlagent;
 
 import ch.ethz.ssh2.Connection;
 import com.alibaba.fastjson.JSONArray;

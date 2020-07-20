@@ -1,4 +1,4 @@
-package com.example.demo.controller;
+package com.example.demo.controller.ezctlapi;
 
 import com.alibaba.fastjson.JSONObject;
 import com.example.demo.model.jysys.Jydata;
@@ -20,7 +20,7 @@ import java.util.Map;
 public class JydataController {
     @Autowired
     JydataService jydataService;
-    @ResponseBody
+  /*  @ResponseBody
     @RequestMapping("/findjyl/selectAlljy")//查询所有
     public Map<String, Object> selectAlljy(@RequestBody String json) {
         JSONObject ob = JSONObject.parseObject(json);
@@ -33,7 +33,7 @@ public class JydataController {
             List<Jydata> alljy = jydataService.getAll();
             List<Jysystm>  syslist = jydataService.getSystm();
             Jysystm jstm = new Jysystm();
-            jstm.setGpsn("all");
+            jstm.setGpsn("all");//选择器，给前端返回一个所有系统选项
             jstm.setId(syslist.size()+1);
             jstm.setSysgp("所有系统");
             syslist.add(0,jstm);
@@ -53,7 +53,7 @@ public class JydataController {
             resultMap.put("code", -1);
         }
         return resultMap;
-    }
+    }*/
     @ResponseBody
     @RequestMapping("/findjyl/findbydate")//根据时间段和交易名称查询
     public Map<String, Object> findbydate(@RequestBody String json) {
@@ -66,12 +66,25 @@ public class JydataController {
         PageHelper.startPage(currentPage,pageSize);
         Map<String, Object> resultMap = new HashMap<String, Object>();
         try {
+            if (begtime.equals("") && endtime.equals("")){
+                begtime = null;
+                endtime = null;
+            }
             List<Jydata> datelist = jydataService.getBytime(begtime, endtime, jysystm);
+            List<Jydata> alljy = jydataService.getBytime(null, null, jysystm);
+            List<Jysystm>  syslist = jydataService.getSystm();
+            Jysystm jstm = new Jysystm();
+            jstm.setGpsn("all");//选择器，给前端返回一个所有系统选项
+            jstm.setId(syslist.size()+1);
+            jstm.setSysgp("所有系统");
+            syslist.add(0,jstm);
             PageInfo<Jydata> pageInfo = new PageInfo<Jydata>(datelist);
             if (datelist.size() > 0) {
                 resultMap.put("status", "0000");
                 resultMap.put("message", "成功");
-                resultMap.put("datelist", pageInfo.getList());
+                resultMap.put("syslist", syslist);
+                resultMap.put("alljy",alljy);
+                resultMap.put("jylist", pageInfo.getList());
                 resultMap.put("pages",pageInfo.getTotal());
             } else {
                 resultMap.put("code", 1);

@@ -1,4 +1,4 @@
-package com.example.demo.controller;
+package com.example.demo.controller.ezctlagent;
 
 import ch.ethz.ssh2.Connection;
 import com.alibaba.fastjson.JSONException;
@@ -15,7 +15,7 @@ import java.util.regex.Pattern;
 
 
 @Controller
-public class JsshController {
+public class DeployController {
     @Value("${liagent.agtpath}")
     private String filepath;
 
@@ -62,7 +62,6 @@ public class JsshController {
             jshell.scpagt(filepath,"/home/",conn);
             String pattn = ".*失败.*";
             List<JSONObject> jlst = new ArrayList();
-
             String[] rarr = jshell.execute(conn,cmd).split("\n");
             for (int i = 0,rl = rarr.length; i < rl; i++) {
                 JSONObject jsonObject = new JSONObject();
@@ -78,7 +77,6 @@ public class JsshController {
                     jlst.add(jsonObject);
                 }
             }
-
             resultMap.put("status", "0000");
             resultMap.put("message","成功");
             resultMap.put("jlst", jlst);

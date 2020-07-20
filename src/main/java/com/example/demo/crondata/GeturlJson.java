@@ -1,4 +1,4 @@
 package com.example.demo.crondata;
 
-public class getUrlJson {
+public class GeturlJson {
 }

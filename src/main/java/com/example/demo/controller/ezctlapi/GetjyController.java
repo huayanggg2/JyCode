@@ -1,4 +1,4 @@
-package com.example.demo.controller.qiyuctl;
+package com.example.demo.controller.ezctlapi;
 
 
 import com.example.demo.config.CronTestConfiguration;

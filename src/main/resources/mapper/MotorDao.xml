@@ -7,13 +7,36 @@
         SELECT * FROM serverdtl where checktime &gt;= #{begintime} and checktime &lt;= #{endtime}
     </select>
     <select id="getcpuByip" resultType="com.example.demo.model.server.Serverdtl">
-        SELECT syscpu,checktime FROM serverdtl where serverip = #{ahostip} and checktime &gt;= #{begintime} and checktime &lt;= #{endtime}
+        SELECT syscpu,checktime FROM serverdtl where serverip = #{ahostip} and checktime &gt;= #{begintime} and
+        checktime &lt;= #{endtime}
     </select>
 
     <select id="getmemByip" resultType="com.example.demo.model.server.Serverdtl">
-        SELECT sysmem,checktime FROM serverdtl where serverip = #{ahostip} and checktime &gt;= #{begintime} and checktime &lt;= #{endtime}
+        SELECT sysmem,checktime FROM serverdtl where serverip = #{ahostip} and checktime &gt;= #{begintime} and
+        checktime &lt;= #{endtime}
     </select>
     <select id="getallnode" resultType="com.example.demo.model.server.Copnts">
         SELECT * FROM serdate
+    </select>
+    <select id="selectAlles" resultType="com.example.demo.model.server.Esmfc">
+        SELECT * FROM real_esmfc
+    </select>
+
+    <select id="selectesByIp" resultType="com.example.demo.model.server.Esmfc">
+        SELECT * FROM real_esmfc
+        <if test="array != null and array.length >0">
+            where ahostip in
+            <foreach collection="array" item="ipa" index="index"
+                     open="(" close=")" separator=",">
+                #{ipa}
+            </foreach>
+            OR acsdeip in
+            <foreach collection="array" item="ipa" index="index"
+                     open="(" close=")" separator=",">
+                #{ipa}
+            </foreach>
+        </if>
+
+
     </select>
 </mapper>

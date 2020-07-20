@@ -20,8 +20,8 @@ public class AgentService {
         return agentDao.selectBysystm(gpsn);
     }
 
-    public List<Agentpmfc> selectByIp(String[] iparr) {
-        return agentDao.selectByIp(iparr);
+    public List<Agentpmfc> selectByIp(String[] iparr,String gpsn) {
+        return agentDao.selectByIp(iparr,gpsn);
     }
 
     public List selectCpu(String hostip, int period) {

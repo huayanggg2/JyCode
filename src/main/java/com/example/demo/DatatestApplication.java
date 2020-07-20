@@ -4,14 +4,16 @@ import com.example.demo.config.CrosFilter;
 import org.springframework.boot.SpringApplication;
 
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
+import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
 @EnableScheduling
 @SpringBootApplication
+//public class DatatestApplication extends SpringBootServletInitializer {
 public class DatatestApplication{
-
 	/*@Override
 	protected SpringApplicationBuilder configure(SpringApplicationBuilder builder) {
 		return builder.sources(DatatestApplication.class);
@@ -26,5 +28,9 @@ public class DatatestApplication{
 		bean.addUrlPatterns("/*");
 		bean.setFilter(new CrosFilter());
 		return bean;
+	}
+	@Bean
+	public FrameSpringBeanUtil frameSpringBeanUtil(){
+		return new FrameSpringBeanUtil();
 	}
 }

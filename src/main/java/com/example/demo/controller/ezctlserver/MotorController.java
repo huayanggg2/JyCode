@@ -1,4 +1,4 @@
-package com.example.demo.controller.qiyuctl;
+package com.example.demo.controller.ezctlserver;
 
 import com.alibaba.fastjson.JSONObject;
 import com.example.demo.model.server.Copnts;
@@ -20,7 +20,7 @@ public class MotorController {
     MotorService motorService;
 
     @ResponseBody
-    @RequestMapping("/motor/getcpuByip")//查询cpu
+    @RequestMapping("/motor/getcpuByip")//查询节点cpu
     public Map<String, Object> getcpuByip(@RequestBody String json) {
         JSONObject ob = JSONObject.parseObject(json);
         String begintime = ob.getJSONObject("bizContent").getString("begintime");
@@ -29,10 +29,21 @@ public class MotorController {
         Map<String, Object> resultMap = new HashMap<String, Object>();
         try {
             List<Serverdtl> getCpu = motorService.getcpuByip(ahostip, begintime, endtime);
+            double[][] cpuew = new double[getCpu.size()][];
+            String cktm = null;
+            String ckcpu = null;
+            for (int j = 0, gm = getCpu.size(); j < gm; j++) {
+                cktm = getCpu.get(j).getChecktime();
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                Date newDate = sdf.parse(cktm);
+                ckcpu = getCpu.get(j).getSyscpu();
+                cpuew[j] = new double[]{newDate.getTime(), Double.parseDouble(ckcpu)};
+            }
+            
             if (getCpu != null) {
                 resultMap.put("status", "0000");
                 resultMap.put("message", "成功");
-                resultMap.put("getCpu", getCpu);
+                resultMap.put("cpuew", cpuew);
             } else {
                 resultMap.put("code", 1);
             }
@@ -44,7 +55,7 @@ public class MotorController {
     }
 
     @ResponseBody
-    @RequestMapping("/motor/getmemByip")//查询mem
+    @RequestMapping("/motor/getmemByip")//查询节点mem
     public Map<String, Object> getmemByip(@RequestBody String json) {
         JSONObject ob = JSONObject.parseObject(json);
         String begintime = ob.getJSONObject("bizContent").getString("begintime");
@@ -53,10 +64,20 @@ public class MotorController {
         Map<String, Object> resultMap = new HashMap<String, Object>();
         try {
             List<Serverdtl> getMem = motorService.getmemByip(ahostip, begintime, endtime);
+            double[][] memew = new double[getMem.size()][];
+            String cktm = null;
+            String ckmem = null;
+            for (int j = 0, gm = getMem.size(); j < gm; j++) {
+                cktm = getMem.get(j).getChecktime();
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                Date newDate = sdf.parse(cktm);
+                ckmem = getMem.get(j).getSysmem();
+                memew[j] = new double[]{newDate.getTime(), Double.parseDouble(ckmem)};
+            }
             if (getMem != null) {
                 resultMap.put("status", "0000");
                 resultMap.put("message", "成功");
-                resultMap.put("getMem", getMem);
+                resultMap.put("memew", memew);
             } else {
                 resultMap.put("code", 1);
             }
@@ -78,8 +99,8 @@ public class MotorController {
         String cktm = null;
         String ckcpu = null;
         String ckmem = null;
-        String[][] cpuew;
-        String[][] memew;
+        double[][] cpuew;
+        double[][] memew;
         try {
             List<Copnts> allnode = motorService.getallnode();
             for (int i = 0, cnde = allnode.size(); i < cnde; i++) {
@@ -89,16 +110,16 @@ public class MotorController {
                 List<Serverdtl> getCpu = motorService.getcpuByip(thip, begintime, endtime);
                 monitor.setNodemc(allnode.get(i).getNodemc());
                 monitor.setServerip(thip);
-                cpuew = new String[getMem.size()][];
-                memew = new String[getMem.size()][];
+                cpuew = new double[getMem.size()][];
+                memew = new double[getMem.size()][];
                 for (int j = 0, gm = getMem.size(); j < gm; j++) {
                     cktm = getCpu.get(j).getChecktime();
                     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                     Date newDate = sdf.parse(cktm);
                     ckcpu = getCpu.get(j).getSyscpu();
                     ckmem = getMem.get(j).getSysmem();
-                    cpuew[j] = new String[]{String.valueOf(newDate.getTime()), ckcpu};
-                    memew[j] = new String[]{String.valueOf(newDate.getTime()), ckmem};
+                    cpuew[j] = new double[]{newDate.getTime(), Double.parseDouble(ckcpu)};
+                    memew[j] = new double[]{newDate.getTime(), Double.parseDouble(ckmem)};
                 }
                 monitor.setCktcpu(cpuew);
                 monitor.setCktmem(memew);

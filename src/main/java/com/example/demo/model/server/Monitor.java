@@ -3,8 +3,25 @@ package com.example.demo.model.server;
 public class Monitor {
     private String serverip;
     private String nodemc;
-    private String[][] cktcpu;
-    private String[][] cktmem;
+    private double[][] cktcpu;
+    private double[][] cktmem;
+
+
+    public double[][] getCktcpu() {
+        return cktcpu;
+    }
+
+    public void setCktcpu(double[][] cktcpu) {
+        this.cktcpu = cktcpu;
+    }
+
+    public double[][] getCktmem() {
+        return cktmem;
+    }
+
+    public void setCktmem(double[][] cktmem) {
+        this.cktmem = cktmem;
+    }
 
     public String getServerip() {
         return serverip;
@@ -22,19 +39,6 @@ public class Monitor {
         this.nodemc = nodemc;
     }
 
-    public String[][] getCktcpu() {
-        return cktcpu;
-    }
 
-    public void setCktcpu(String[][] cktcpu) {
-        this.cktcpu = cktcpu;
-    }
 
-    public String[][] getCktmem() {
-        return cktmem;
-    }
-
-    public void setCktmem(String[][] cktmem) {
-        this.cktmem = cktmem;
-    }
 }

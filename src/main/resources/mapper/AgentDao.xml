@@ -55,21 +55,25 @@
         amem,c.syscpu asyscpu,c.sysmem asysmem,c.autoctl atcl FROM hostdtl htl INNER JOIN (SELECT a.* FROM realtime a,
         (SELECT
         ahostip,MAX(checktime) checktime FROM realtime GROUP BY ahostip) b WHERE a.checktime = b.checktime AND
-        a.ahostip = b.ahostip) c on htl.hostip = c.ahostip WHERE htl.hostip in
-        <foreach collection="array" item="hostip" index="index"
+        a.ahostip = b.ahostip) c on htl.hostip = c.ahostip WHERE htl.hgpsn =
+        #{gpsn}
+        <if test="iparr != null and iparr.length >0">
+        and htl.hostip in
+        <foreach collection="iparr" item="hostip" index="index"
                  open="(" close=")" separator=",">
             #{hostip}
         </foreach>
         OR c.acsdeip in
-        <foreach collection="array" item="hostip" index="index"
+        <foreach collection="iparr" item="hostip" index="index"
                  open="(" close=")" separator=",">
             #{hostip}
         </foreach>
+        </if>
     </select>
     <select id="selectCpu" resultType="string">
-        SELECT cpu FROM agentpmfc WHERE ahostip = #{hostip} ORDER BY id DESC LIMIT 0,#{period}
-        <!--SELECT cpu FROM agentpmfc WHERE ahostip = #{hostip} AND checktime >= DATE_ADD(now(),INTERVAL
-        #{period} MINUTE)-->
+        <!--SELECT cpu FROM agentpmfc WHERE ahostip = #{hostip} ORDER BY id DESC LIMIT 0,#{period}-->
+        SELECT cpu FROM agentpmfc WHERE ahostip = #{hostip} AND checktime >= DATE_ADD(now(),INTERVAL
+        #{period} MINUTE)
     </select>
     <select id="selectMem" resultType="string">
         SELECT mem FROM agentpmfc WHERE ahostip = #{hostip} ORDER BY id DESC LIMIT 0,#{period}

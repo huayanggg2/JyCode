@@ -1,4 +1,4 @@
-package com.example.demo.controller;
+package com.example.demo.controller.ezctlagent;
 
 import ch.ethz.ssh2.Connection;
 import com.alibaba.fastjson.JSONArray;
@@ -59,11 +59,16 @@ public class AgentController {
         int currentPage = ob.getJSONObject("bizContent").getInteger("currentPage");
         int pageSize = ob.getJSONObject("bizContent").getInteger("pageSize");
         String gpsn = ob.getJSONObject("bizContent").getString("gpsn");
+        String hostip = ob.getJSONObject("bizContent").getString("hostip");
+        String[] iparr = hostip.split(",");
+        if (hostip.equals("")){
+            iparr = null;
+        }
         Map<String, Object> resultMap = new HashMap<String, Object>();
         PageHelper.startPage(currentPage,pageSize);
         try {
-            List<Agentpmfc> agtlst = agentService.selectBysystm(gpsn);
-            List<Agentpmfc> allagt = agentService.selectBysystm(gpsn);
+            List<Agentpmfc> agtlst = agentService.selectByIp(iparr,gpsn);
+            List<Agentpmfc> allagt = agentService.selectByIp(null,gpsn);
             PageInfo<Agentpmfc> pageInfo = new PageInfo<Agentpmfc>(agtlst);
             if (agtlst.size() > 0) {
                 resultMap.put("status", "0000");
@@ -80,7 +85,7 @@ public class AgentController {
         }
         return resultMap;
     }
-    @ResponseBody
+   /* @ResponseBody
     @RequestMapping("/agent/selectByIp")//通过ip搜索
     public Map<String, Object> selectByIp(@RequestBody String json) {
         JSONObject obct = JSONObject.parseObject(json);
@@ -88,7 +93,7 @@ public class AgentController {
         String[] iparr = hostip.split(",");
         Map<String, Object> resultMap = new HashMap<String, Object>();
         try {
-        List<Agentpmfc> atc = agentService.selectByIp(iparr);
+        List<Agentpmfc> atc = agentService.selectByIp(iparr,"");
             if (atc != null) {
                 resultMap.put("status", "0000");
                 resultMap.put("message", "成功");
@@ -101,7 +106,7 @@ public class AgentController {
             resultMap.put("status", -1);
         }
         return resultMap;
-    }
+    }*/
     @ResponseBody
     @RequestMapping("/agent/agentOperate")//操作探针
     public Map<String, Object> agentStart(@RequestBody String allips){
@@ -122,7 +127,7 @@ public class AgentController {
             String cmd = "cd /home/log/loginsight-agent/VxLogSideCar/ && sh vxlog-server.sh "+execmd +" >/dev/null && ps -ef|grep VxLog|grep -v grep|wc -l";
             result = jshell.execute(conn,cmd);
         }
-        try {
+            try {
             Thread.sleep(6000);
         } catch (InterruptedException e) {
             e.printStackTrace();
@@ -142,7 +147,7 @@ public class AgentController {
     public Map<String, Object> selectCpu(@RequestBody String json) {
         JSONObject obct = JSONObject.parseObject(json);
         String hostip = obct.getJSONObject("bizContent").getString("hostip");
-        int period = obct.getJSONObject("bizContent").getInteger("period")*12;
+        int period = obct.getJSONObject("bizContent").getInteger("period")*(-1);
         Map<String, Object> resultMap = new HashMap<String, Object>();
         try {
             List targetlst = agentService.selectCpu(hostip,period);

@@ -1,4 +1,4 @@
-package com.example.demo.controller.qiyuctl;
+package com.example.demo.controller.ezctlserver;
 
 import ch.ethz.ssh2.Connection;
 import com.alibaba.fastjson.JSONArray;

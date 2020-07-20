@@ -1,4 +1,4 @@
-package com.example.demo.controller;
+package com.example.demo.controller.ezctlagent;
 
 import ch.ethz.ssh2.Connection;
 import com.example.demo.alltools.Jshell;
@@ -104,7 +104,7 @@ public class UpfileController {
         jshell.execute(conn, cmd);
         resultMap.put("status", "0000");
         resultMap.put("message","成功");
-        resultMap.put("sucescmd", "上传成功！请在平台输入：'SourceModuleName:客户合约_tmp.log' 查看日志");
+        //resultMap.put("sucescmd", "上传成功！请在平台输入：'SourceModuleName:客户合约_tmp.log' 查看日志");
         return resultMap;
     }
 
