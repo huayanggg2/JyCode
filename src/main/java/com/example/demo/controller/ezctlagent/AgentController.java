@@ -17,9 +17,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 @Controller
 public class AgentController {
@@ -150,11 +149,26 @@ public class AgentController {
         int period = obct.getJSONObject("bizContent").getInteger("period")*(-1);
         Map<String, Object> resultMap = new HashMap<String, Object>();
         try {
-            List targetlst = agentService.selectCpu(hostip,period);
+            double[][] cpuew;
+            String cktm = null;
+            String ckcpu = null;
+            List relst = new ArrayList();
+            List<Agentpmfc> targetlst = agentService.selectCpu(hostip,period);
+            cpuew = new double[targetlst.size()][];
+
+            for (int j = 0, ts = targetlst.size(); j < ts; j++) {
+                cktm = targetlst.get(j).getChecktime();
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                Date newDate = sdf.parse(cktm);
+                ckcpu = targetlst.get(j).getCpu();
+                cpuew[j] = new double[]{newDate.getTime(), Double.parseDouble(ckcpu)};
+                relst.add(cpuew[j]);
+            }
+
             if (targetlst != null) {
                 resultMap.put("status", "0000");
                 resultMap.put("message", "成功");
-                resultMap.put("targetlst", targetlst);
+                resultMap.put("relst", relst);
             } else {
                 resultMap.put("status", 1);
             }
@@ -169,14 +183,29 @@ public class AgentController {
     public Map<String, Object> selectMem(@RequestBody String json) {
         JSONObject obct = JSONObject.parseObject(json);
         String hostip = obct.getJSONObject("bizContent").getString("hostip");
-        int period = obct.getJSONObject("bizContent").getInteger("period");
+        int period = obct.getJSONObject("bizContent").getInteger("period")*-1;
         Map<String, Object> resultMap = new HashMap<String, Object>();
         try {
-            List targetlst = agentService.selectMem(hostip,period);
+            double[][] memew;
+            String cktm = null;
+            String ckmem = null;
+            List relst = new ArrayList();
+            List<Agentpmfc> targetlst = agentService.selectMem(hostip,period);
+            memew = new double[targetlst.size()][];
+
+            for (int j = 0, ts = targetlst.size(); j < ts; j++) {
+                cktm = targetlst.get(j).getChecktime();
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                Date newDate = sdf.parse(cktm);
+                ckmem = targetlst.get(j).getMem();
+                memew[j] = new double[]{newDate.getTime(), Double.parseDouble(ckmem)};
+                relst.add(memew[j]);
+            }
+
             if (targetlst != null) {
                 resultMap.put("status", "0000");
                 resultMap.put("message", "成功");
-                resultMap.put("targetlst", targetlst);
+                resultMap.put("relst", relst);
             } else {
                 resultMap.put("status", 1);
             }

@@ -46,6 +46,7 @@ public class DeployController {
                 String cmd = "cd /home && unzip logtool.zip>/dev/null && sh /home/logtool/vxlog.sh " + csdearr[i] + " " + logdir;
                 //jshell.scpagt("E:/logtool.zip","/home/",conn);
                 jshell.scpagt(filepath,"/home/",conn);
+               // result = jshell.execute(conn,cmd);
                 result = jshell.execute(conn,cmd).split("\n");
                 lastres = hostarr[i] + " " + result[result.length - 1];
                 lst.add(lastres);
@@ -62,8 +63,8 @@ public class DeployController {
             jshell.scpagt(filepath,"/home/",conn);
             String pattn = ".*失败.*";
             List<JSONObject> jlst = new ArrayList();
-            String[] rarr = jshell.execute(conn,cmd).split("\n");
-            for (int i = 0,rl = rarr.length; i < rl; i++) {
+           String[] rarr = jshell.execute(conn,cmd).split("\n");
+             for (int i = 0,rl = rarr.length; i < rl; i++) {
                 JSONObject jsonObject = new JSONObject();
                 String rtn = rarr[i];
                 boolean isMatch = Pattern.matches(pattn, rtn);

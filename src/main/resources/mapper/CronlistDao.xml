@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<!-- 这里填写对应的Dao文件所在的路径 -->
+<mapper namespace="com.example.demo.dao.CronlistDao">
+    <select id="getCrondtl" resultType="com.example.demo.model.Crondtl">
+        select * from crontask where status = 0
+    </select>
+    <select id="getCronbycronid" resultType="com.example.demo.model.Crondtl">
+        select * from crontask where cronid = #{cronid}
+    </select>
+    <select id="getAllTasks" resultType="com.example.demo.model.Crondtl">
+        select * from crontask
+        <where>
+            <if test="find != null and find != ''">
+                find like "%"#{find}"%"
+            </if>
+        </where>
+    </select>
+    <update id="stopCron" parameterType="int">
+        update crontask SET status = 1 WHERE cronid = #{cronid}
+    </update>
+    <update id="startCron" parameterType="int">
+        update crontask SET status = 0 WHERE cronid = #{cronid}
+    </update>
+    <insert id="createTask" parameterType="com.example.demo.model.Crondtl">
+        INSERT INTO crontask (systm,cronkey,crontk,getapi,status,username)
+        VALUES (#{systm},#{cronkey},#{crontk},#{getapi},#{status},#{username})
+    </insert>
+    <delete id="deleteTask" parameterType="int">
+        delete from crontask where cronid = #{cronid}
+    </delete>
+    <update id="updateTask" parameterType="com.example.demo.model.Crondtl">
+        UPDATE crontask SET
+        systm=#{systm},cronkey=#{cronkey},crontk=#{crontk},getapi=#{getapi},username=#{username}
+        where cronid=#{cronid}
+    </update>
+    <select id="showonetask" parameterType="int" resultType="com.example.demo.model.Crondtl">
+        select * from crontask where cronid = #{cronid}
+    </select>
+</mapper>

@@ -1,17 +1,14 @@
 package com.example.demo.crondata;
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.example.demo.alltools.AgtWebsocket;
 import com.example.demo.alltools.JqWebSocket;
 import com.example.demo.model.server.Esmfc;
 import com.example.demo.service.MotorService;
-import com.github.pagehelper.PageHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
 import java.util.List;
@@ -35,7 +32,7 @@ public class EsStatus {
             resultMap.put("lses", lses);
             JSONObject ob = JSONObject.parseObject(JSON.toJSONString(resultMap));
             String str = ob.toString();
-            jqWebSocket.sendMessage();
+           // jqWebSocket.sendMessage();
         }
 
     @Scheduled(cron = "*/5 * * * * ?")
@@ -47,6 +44,7 @@ public class EsStatus {
         JSONObject ob = JSONObject.parseObject(JSON.toJSONString(resultMap));
         String str = ob.toString();
         agtWebsocket.sendMessage(str);
+        agtWebsocket.onClose();
     }
 
 }

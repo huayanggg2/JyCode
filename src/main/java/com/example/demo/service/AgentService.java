@@ -24,11 +24,11 @@ public class AgentService {
         return agentDao.selectByIp(iparr,gpsn);
     }
 
-    public List selectCpu(String hostip, int period) {
+    public List<Agentpmfc> selectCpu(String hostip, int period) {
         return agentDao.selectCpu(hostip,period);
     }
 
-    public List selectMem(String hostip, int period) {
+    public List<Agentpmfc> selectMem(String hostip, int period) {
         return agentDao.selectMem(hostip,period);
     }
 

@@ -15,4 +15,8 @@ public class WebSocketConfig {
         return new ServerEndpointExporter();
     }
 
+    @Bean
+    public MyEndpointConfigure newConfigure() {
+        return new MyEndpointConfigure();
+    }
 }

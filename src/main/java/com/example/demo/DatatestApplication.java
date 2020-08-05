@@ -12,9 +12,9 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 
 @EnableScheduling
 @SpringBootApplication
-//public class DatatestApplication extends SpringBootServletInitializer {
 public class DatatestApplication{
-	/*@Override
+/*public class DatatestApplication extends SpringBootServletInitializer {
+	@Override
 	protected SpringApplicationBuilder configure(SpringApplicationBuilder builder) {
 		return builder.sources(DatatestApplication.class);
 	}*/

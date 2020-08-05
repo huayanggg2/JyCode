@@ -70,13 +70,14 @@
         </foreach>
         </if>
     </select>
-    <select id="selectCpu" resultType="string">
+    <select id="selectCpu" resultType="com.example.demo.model.agent.Agentpmfc">
         <!--SELECT cpu FROM agentpmfc WHERE ahostip = #{hostip} ORDER BY id DESC LIMIT 0,#{period}-->
-        SELECT cpu FROM agentpmfc WHERE ahostip = #{hostip} AND checktime >= DATE_ADD(now(),INTERVAL
+        SELECT cpu,checktime FROM agentpmfc WHERE ahostip = #{hostip} AND checktime >= DATE_ADD(now(),INTERVAL
         #{period} MINUTE)
     </select>
-    <select id="selectMem" resultType="string">
-        SELECT mem FROM agentpmfc WHERE ahostip = #{hostip} ORDER BY id DESC LIMIT 0,#{period}
+    <select id="selectMem" resultType="com.example.demo.model.agent.Agentpmfc">
+        SELECT mem,checktime FROM agentpmfc WHERE ahostip = #{hostip} AND checktime >= DATE_ADD(now(),INTERVAL
+        #{period} MINUTE)
     </select>
     <select id="selectAllip" resultType="string" parameterType="string">
         SELECT hostip FROM hostdtl WHERE hgpsn = #{gpsn}

@@ -9,6 +9,15 @@ public class Agentpmfc {
         private String syscpu;//系统cpu
         private String sysmem;//系统内存
         private String status;//自动控制开关
+        private String checktime;//采集时间
+
+        public String getChecktime() {
+                return checktime;
+        }
+
+        public void setChecktime(String checktime) {
+                this.checktime = checktime;
+        }
 
         public String getStatus() {
                 return status;

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<!-- 这里填写对应的Dao文件所在的路径 -->
+<mapper namespace="com.example.demo.dao.AnalysisDao">
+    <insert id="setAnalysis" parameterType="com.example.demo.model.Analysis">
+        INSERT INTO
+        analysis
+        (jydate,sysaplatn,type,entries)
+        VALUES
+        (#{jydate},#{sysaplatn},#{type},#{entries})
+    </insert>
+    <select id="slctonesys" resultType="com.example.demo.model.Analysis">
+        SELECT DATE_FORMAT(jydate, '%Y-%m-%d') jydate,entries FROM analysis WHERE sysaplatn = #{sysaplatn} AND jydate &gt;= #{fxbgtm} and jydate &lt;= #{fxedtm}
+    </select>
+<select id="slcttps" resultType="com.example.demo.model.Analysis">
+    select MAX(entries) entries,DATE_FORMAT(jydate, '%Y-%m-%d') jydate
+    FROM
+    analysis WHERE sysaplatn = #{sysaplatn} AND jydate &gt;= #{fxbgtm} and jydate &lt;= #{fxedtm}
+    GROUP BY
+    DATE_FORMAT(jydate, '%Y-%m-%d')
+</select>
+
+   <!-- SELECT
+    MAX(entries),DATE_FORMAT(jydate, '%Y-%m-%d')
+    FROM
+    analysis WHERE sysaplatn = 'hlw'
+    GROUP BY
+    DATE_FORMAT(jydate, '%Y-%m-%d')-->
+</mapper>

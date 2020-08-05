@@ -81,8 +81,12 @@ public class AutoctlController {
             result = jshell.execute(conn, cmd);
             strlst.add(result);
         }
-
-            resultMap.put("status", "0000");
+        try {
+            Thread.sleep(6000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        resultMap.put("status", "0000");
             resultMap.put("message", "成功");
         return resultMap;
     }

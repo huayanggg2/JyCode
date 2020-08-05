@@ -1,24 +1,10 @@
 package com.example.demo.controller.ezctlapi;
 
 
-import com.example.demo.config.CronTestConfiguration;
-import com.example.demo.crondata.MyRunnable1;
-import com.example.demo.crondata.MyRunnable2;
 import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
-import org.springframework.scheduling.Trigger;
-import org.springframework.scheduling.TriggerContext;
-import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
-import org.springframework.scheduling.support.CronTrigger;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.Date;
-import java.util.concurrent.ScheduledFuture;
 
 /**
  * <pre>
@@ -35,7 +21,7 @@ import java.util.concurrent.ScheduledFuture;
 @RequestMapping("/quartz/task")
 public class GetjyController {
 
-    @Autowired
+ /*   @Autowired
     private CronTestConfiguration cronTestConfiguration;
 
     @Autowired
@@ -45,11 +31,11 @@ public class GetjyController {
 
     private ScheduledFuture<?> future2;
 
-    @Bean
+  *//*  @Bean
     public ThreadPoolTaskScheduler threadPoolTaskScheduler() {
         return new ThreadPoolTaskScheduler();
     }
-
+*//*
     @PostMapping("/startCron1")
     @ApiOperation("开始定时任务1")
     public void startCron1() {
@@ -104,6 +90,6 @@ public class GetjyController {
         }
         System.out.println("DynamicTask.stopCron2()");
         return "";
-    }
+    }*/
 
 }

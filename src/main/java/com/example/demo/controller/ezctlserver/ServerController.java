@@ -56,7 +56,7 @@ public class ServerController {
         Connection conn = null;
         //String[] result = {""};
         String result = "";
-        sshhost.setUsername("root");
+        sshhost.setUsername("loginsight");
         sshhost.setPassword("123456");
         for (int i = 0, ds = dataList.size(); i < ds; i++) {
             JSONObject jbt = JSONObject.parseObject(dataList.get(i).toString());
@@ -68,7 +68,7 @@ public class ServerController {
             System.out.println(result);
         }
         try {
-            Thread.sleep(5);
+            Thread.sleep(5000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

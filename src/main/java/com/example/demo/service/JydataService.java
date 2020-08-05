@@ -37,4 +37,8 @@ public class JydataService {
     public List<Jysystm> getSystm() {
         return jydataDao.getSystm();
     }
+
+    public void setSer(List<Jydetail> ljd) {
+        jydataDao.setSer(ljd);
+    }
 }
