@@ -40,7 +40,6 @@ public class ServerController {
         resultMap.put("groupMap1", groupMap1);
         resultMap.put("sdtlst", sdtlst);
         /*   resultMap.put("cptlst", cptlst);*/
-
         return resultMap;
     }
 

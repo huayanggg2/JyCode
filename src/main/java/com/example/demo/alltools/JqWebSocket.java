@@ -39,7 +39,7 @@ import java.util.concurrent.ScheduledFuture;
  *  
  */
 
-@Component
+//@Component
 @ServerEndpoint(value = "/reales/{currentPage}/{pageSize}", configurator = MyEndpointConfigure.class)
 public class JqWebSocket {
 

@@ -29,6 +29,7 @@ public class AnalysisController {
         String sysaplatn = ob.getJSONObject("bizContent").getString("sysaplatn");
         String lstfxbgtm = gdt.getLastmonth(fxbgtm);
         String lstfxedtm = gdt.getLastmonth(fxedtm);
+        //前端需要，所以写的很复杂
         Map<String, Object> resultMap = new HashMap<String, Object>();
         String[] iparr = sysaplatn.split(",");
         List<String> timels = new ArrayList<>();
@@ -40,27 +41,13 @@ public class AnalysisController {
             List<Analysis> lajyl = analysisService.slctonesys(fxbgtm, fxedtm, "hlwjyl");
             List<Analysis> lastjyl = analysisService.slctonesys(lstfxbgtm, lstfxedtm, "hlwjyl");
             double c = 1, d = 1;
-         /*   if(latps.size() > lasttps.size()){
-                for (int i = 0,lenth = latps.size(); i < lenth-1;i++){
-                    a = latps.get(i).getEntries();
-                    b = lasttps.get(i).getEntries();
-                    latps.get(i).setRatio(String.format("%.2f", (double)a/b-1));
-                    c = lajyl.get(i).getEntries();
-                    d = lastjyl.get(i).getEntries();
-                    lajyl.get(i).setRatio(String.format("%.2f", (double)c/d-1));
-                }
-                a = latps.get(latps.size()-1).getEntries();
-                b = lasttps.get(lasttps.size()-1).getEntries();
-                latps.get(latps.size()-1).setRatio(String.format("%.2f", (double)a/b-1));
-            }else {
-            }*/
             for (int i = 0, lenth = latps.size(); i < lenth; i++) {
                 a = latps.get(i).getEntries();
                 b = lasttps.get(i).getEntries();
-                latps.get(i).setRatio(String.format("%.2f", (double) (a / b - 1)*100));
+                latps.get(i).setRatio(String.format("%.2f", (a / b - 1) * 100));
                 c = lajyl.get(i).getEntries();
                 d = lastjyl.get(i).getEntries();
-                lajyl.get(i).setRatio(String.format("%.2f", (double) (c / d - 1)*100));
+                lajyl.get(i).setRatio(String.format("%.2f", (c / d - 1) * 100));
             }
             resultMap.put("latps", latps);
             resultMap.put("lajyl", lajyl);
@@ -69,21 +56,10 @@ public class AnalysisController {
             List<Analysis> lastjyl = analysisService.slctonesys(lstfxbgtm, lstfxedtm, sysaplatn);
             lajyl.forEach(any -> timels.add(any.getJydate()));
             lajyl.forEach(any -> jlyls.add(any.getEntries()));
-      /*      if(lajyl.size() > lastjyl.size()){
-                for (int i = 0,lenth = lajyl.size(); i < lenth-1;i++){
-                    a = lajyl.get(i).getEntries();
-                    b = lastjyl.get(i).getEntries();
-                    lajyl.get(i).setRatio(String.format("%.2f", (double)a/b-1));
-                }
-                a = lajyl.get(lajyl.size()-1).getEntries();
-                b = lastjyl.get(lastjyl.size()-1).getEntries();
-                lajyl.get(lajyl.size()-1).setRatio(String.format("%.2f", (double)a/b-1));
-            }else {
-            }*/
             for (int i = 0, lenth = lajyl.size(); i < lenth; i++) {
                 a = lajyl.get(i).getEntries();
                 b = lastjyl.get(i).getEntries();
-                lajyl.get(i).setRatio(String.format("%.2f", (double)(a / b - 1)*100));
+                lajyl.get(i).setRatio(String.format("%.2f", (a / b - 1) * 100));
             }
             resultMap.put("lajyl", lajyl);
             resultMap.put("timels", timels);

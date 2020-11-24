@@ -3,6 +3,7 @@ package com.example.demo.service;
 import com.example.demo.dao.AgentDao;
 import com.example.demo.model.agent.Agentpmfc;
 import com.example.demo.model.agent.Agentsystm;
+import com.example.demo.model.agent.Hostdtl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -41,4 +42,7 @@ public class AgentService {
     }
 
 
+    public void addhost(Hostdtl hostdtl) {
+        agentDao.addhost(hostdtl);
+    }
 }

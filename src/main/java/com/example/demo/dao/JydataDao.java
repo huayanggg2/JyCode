@@ -24,4 +24,6 @@ public interface JydataDao {
     List<Jydetail> searchOne(String dasn, String serapi);
 
     List<Jysystm> getSystm();
+
+    void addSystm(Jysystm jstm);
 }

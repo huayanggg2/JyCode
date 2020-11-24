@@ -64,4 +64,11 @@
             and serapi like "%"#{serapi}"%"
         </if>
     </select>
+    <insert id="addSystm" parameterType="com.example.demo.model.jysys.Jysystm">
+        INSERT INTO
+        sysname
+        (sysgp,gpsn,cpuValue,ifdsab)
+        VALUES
+        (#{sysgp},#{gpsn},#{cpuValue},#{ifdsab})
+    </insert>
 </mapper>

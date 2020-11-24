@@ -73,11 +73,11 @@
     <select id="selectCpu" resultType="com.example.demo.model.agent.Agentpmfc">
         <!--SELECT cpu FROM agentpmfc WHERE ahostip = #{hostip} ORDER BY id DESC LIMIT 0,#{period}-->
         SELECT cpu,checktime FROM agentpmfc WHERE ahostip = #{hostip} AND checktime >= DATE_ADD(now(),INTERVAL
-        #{period} MINUTE)
+        #{period} MINUTE) AND cpu != "-"
     </select>
     <select id="selectMem" resultType="com.example.demo.model.agent.Agentpmfc">
         SELECT mem,checktime FROM agentpmfc WHERE ahostip = #{hostip} AND checktime >= DATE_ADD(now(),INTERVAL
-        #{period} MINUTE)
+        #{period} MINUTE) AND mem != "-"
     </select>
     <select id="selectAllip" resultType="string" parameterType="string">
         SELECT hostip FROM hostdtl WHERE hgpsn = #{gpsn}
@@ -85,4 +85,11 @@
     <update id="setCpuwarn" parameterType="string">
         UPDATE sysname SET cpuValue = #{cpuValue} WHERE gpsn = #{gpsn}
     </update>
+    <insert id="addhost" parameterType="com.example.demo.model.agent.Hostdtl">
+        INSERT INTO
+        hostdtl
+        (hgpsn,hostip,csdeip,agentvsn)
+        VALUES
+        (#{hgpsn},#{hostip},#{csdeip},#{agentvsn})
+    </insert>
 </mapper>

@@ -41,4 +41,8 @@ public class JydataService {
     public void setSer(List<Jydetail> ljd) {
         jydataDao.setSer(ljd);
     }
+
+    public void addSystm(Jysystm jstm) {
+        jydataDao.addSystm(jstm);
+    }
 }

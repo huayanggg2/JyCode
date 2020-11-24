@@ -1,6 +1,7 @@
 package com.example.demo.controller.ezctlserver;
 
 import com.alibaba.fastjson.JSONObject;
+import com.example.demo.model.mntrdtl.Hostrst7;
 import com.example.demo.model.server.Copnts;
 import com.example.demo.model.server.Monitor;
 import com.example.demo.model.server.Serverdtl;
@@ -39,7 +40,7 @@ public class MotorController {
                 ckcpu = getCpu.get(j).getSyscpu();
                 cpuew[j] = new double[]{newDate.getTime(), Double.parseDouble(ckcpu)};
             }
-            
+
             if (getCpu != null) {
                 resultMap.put("status", "0000");
                 resultMap.put("message", "成功");
@@ -61,6 +62,7 @@ public class MotorController {
         String begintime = ob.getJSONObject("bizContent").getString("begintime");
         String endtime = ob.getJSONObject("bizContent").getString("endtime");
         String ahostip = ob.getJSONObject("bizContent").getString("ahostip");
+        //前端需要，所以写的很复杂
         Map<String, Object> resultMap = new HashMap<String, Object>();
         try {
             List<Serverdtl> getMem = motorService.getmemByip(ahostip, begintime, endtime);

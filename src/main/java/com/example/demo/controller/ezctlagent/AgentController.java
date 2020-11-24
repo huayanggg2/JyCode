@@ -32,7 +32,7 @@ public class AgentController {
         JSONObject ob = JSONObject.parseObject(json);
         int currentPage = ob.getJSONObject("bizContent").getInteger("currentPage");
         int pageSize = ob.getJSONObject("bizContent").getInteger("pageSize");
-        PageHelper.startPage(currentPage,pageSize);
+        PageHelper.startPage(currentPage, pageSize);
         try {
             List<Agentsystm> syslst = agentService.selectsystem();
             PageInfo<Agentsystm> pageInfo = new PageInfo<Agentsystm>(syslst);
@@ -40,7 +40,7 @@ public class AgentController {
                 resultMap.put("status", "0000");
                 resultMap.put("message", "成功");
                 resultMap.put("syslst", pageInfo.getList());
-                resultMap.put("pages",pageInfo.getTotal());
+                resultMap.put("pages", pageInfo.getTotal());
             } else {
                 resultMap.put("code", 1);
             }
@@ -60,21 +60,21 @@ public class AgentController {
         String gpsn = ob.getJSONObject("bizContent").getString("gpsn");
         String hostip = ob.getJSONObject("bizContent").getString("hostip");
         String[] iparr = hostip.split(",");
-        if (hostip.equals("")){
+        if (hostip.equals("")) {
             iparr = null;
         }
         Map<String, Object> resultMap = new HashMap<String, Object>();
-        PageHelper.startPage(currentPage,pageSize);
+        PageHelper.startPage(currentPage, pageSize);
         try {
-            List<Agentpmfc> agtlst = agentService.selectByIp(iparr,gpsn);
-            List<Agentpmfc> allagt = agentService.selectByIp(null,gpsn);
+            List<Agentpmfc> agtlst = agentService.selectByIp(iparr, gpsn);
+            List<Agentpmfc> allagt = agentService.selectByIp(null, gpsn);
             PageInfo<Agentpmfc> pageInfo = new PageInfo<Agentpmfc>(agtlst);
             if (agtlst.size() > 0) {
                 resultMap.put("status", "0000");
                 resultMap.put("message", "成功");
                 resultMap.put("agtlst", pageInfo.getList());
                 resultMap.put("allagt", allagt);
-                resultMap.put("pages",pageInfo.getTotal());
+                resultMap.put("pages", pageInfo.getTotal());
             } else {
                 resultMap.put("code", 1);
             }
@@ -84,34 +84,35 @@ public class AgentController {
         }
         return resultMap;
     }
-   /* @ResponseBody
-    @RequestMapping("/agent/selectByIp")//通过ip搜索
-    public Map<String, Object> selectByIp(@RequestBody String json) {
-        JSONObject obct = JSONObject.parseObject(json);
-        String hostip = obct.getJSONObject("bizContent").getString("hostip");
-        String[] iparr = hostip.split(",");
-        Map<String, Object> resultMap = new HashMap<String, Object>();
-        try {
-        List<Agentpmfc> atc = agentService.selectByIp(iparr,"");
-            if (atc != null) {
-                resultMap.put("status", "0000");
-                resultMap.put("message", "成功");
-                resultMap.put("atc", atc);
-            } else {
-                resultMap.put("status", 1);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            resultMap.put("status", -1);
-        }
-        return resultMap;
-    }*/
+
+    /* @ResponseBody
+     @RequestMapping("/agent/selectByIp")//通过ip搜索
+     public Map<String, Object> selectByIp(@RequestBody String json) {
+         JSONObject obct = JSONObject.parseObject(json);
+         String hostip = obct.getJSONObject("bizContent").getString("hostip");
+         String[] iparr = hostip.split(",");
+         Map<String, Object> resultMap = new HashMap<String, Object>();
+         try {
+         List<Agentpmfc> atc = agentService.selectByIp(iparr,"");
+             if (atc != null) {
+                 resultMap.put("status", "0000");
+                 resultMap.put("message", "成功");
+                 resultMap.put("atc", atc);
+             } else {
+                 resultMap.put("status", 1);
+             }
+         } catch (Exception e) {
+             e.printStackTrace();
+             resultMap.put("status", -1);
+         }
+         return resultMap;
+     }*/
     @ResponseBody
     @RequestMapping("/agent/agentOperate")//操作探针
-    public Map<String, Object> agentStart(@RequestBody String allips){
+    public Map<String, Object> agentStart(@RequestBody String allips) {
         Map<String, Object> resultMap = new HashMap<String, Object>();
         JSONObject ob = JSONObject.parseObject(allips);
-       // String hostip = ob.getJSONObject("bizContent").getString("hostip");
+        // String hostip = ob.getJSONObject("bizContent").getString("hostip");
         JSONArray iparr = ob.getJSONObject("bizContent").getJSONArray("hostip");
         String execmd = ob.getJSONObject("bizContent").getString("execmd");
         Sshhost sshhost = new Sshhost();
@@ -120,40 +121,41 @@ public class AgentController {
         sshhost.setUsername("log");
         sshhost.setPassword("log");
         String result = "";
-        for (int i = 0,ipse = iparr.size(); i <ipse; i++) {
+        for (int i = 0, ipse = iparr.size(); i < ipse; i++) {
             sshhost.setHostip((String) iparr.get(i));
             conn = jshell.login(sshhost);
-            String cmd = "cd /home/log/loginsight-agent/VxLogSideCar/ && sh vxlog-server.sh "+execmd +" >/dev/null && ps -ef|grep VxLog|grep -v grep|wc -l";
-            result = jshell.execute(conn,cmd);
+            String cmd = "cd /home/log/loginsight-agent/VxLogSideCar/ && sh vxlog-server.sh " + execmd + " >/dev/null && ps -ef|grep VxLog|grep -v grep|wc -l";
+            result = jshell.execute(conn, cmd);
         }
-            try {
+        try {
             Thread.sleep(6000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        if(result != null){
+        if (result != null) {
             resultMap.put("status", "0000");
-            resultMap.put("message","成功");
+            resultMap.put("message", "成功");
             return resultMap;
-        }else {
+        } else {
             resultMap.put("status", "0001");
-            resultMap.put("message","失败");
-           return resultMap;
+            resultMap.put("message", "失败");
+            return resultMap;
+        }
     }
-    }
+
     @ResponseBody
     @RequestMapping("/agent/selectCpu")//通过时间段搜索cpu
     public Map<String, Object> selectCpu(@RequestBody String json) {
         JSONObject obct = JSONObject.parseObject(json);
         String hostip = obct.getJSONObject("bizContent").getString("hostip");
-        int period = obct.getJSONObject("bizContent").getInteger("period")*(-1);
+        int period = obct.getJSONObject("bizContent").getInteger("period") * (-1);
         Map<String, Object> resultMap = new HashMap<String, Object>();
         try {
             double[][] cpuew;
             String cktm = null;
             String ckcpu = null;
             List relst = new ArrayList();
-            List<Agentpmfc> targetlst = agentService.selectCpu(hostip,period);
+            List<Agentpmfc> targetlst = agentService.selectCpu(hostip, period);
             cpuew = new double[targetlst.size()][];
 
             for (int j = 0, ts = targetlst.size(); j < ts; j++) {
@@ -178,19 +180,20 @@ public class AgentController {
         }
         return resultMap;
     }
+
     @ResponseBody
     @RequestMapping("/agent/selectMem")//通过时间段搜索mem
     public Map<String, Object> selectMem(@RequestBody String json) {
         JSONObject obct = JSONObject.parseObject(json);
         String hostip = obct.getJSONObject("bizContent").getString("hostip");
-        int period = obct.getJSONObject("bizContent").getInteger("period")*-1;
+        int period = obct.getJSONObject("bizContent").getInteger("period") * -1;
         Map<String, Object> resultMap = new HashMap<String, Object>();
         try {
             double[][] memew;
             String cktm = null;
             String ckmem = null;
             List relst = new ArrayList();
-            List<Agentpmfc> targetlst = agentService.selectMem(hostip,period);
+            List<Agentpmfc> targetlst = agentService.selectMem(hostip, period);
             memew = new double[targetlst.size()][];
 
             for (int j = 0, ts = targetlst.size(); j < ts; j++) {

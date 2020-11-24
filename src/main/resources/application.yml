@@ -7,10 +7,11 @@ spring:
     url: jdbc:mysql://158.222.187.109:3306/test?useUnicode=true&characterEncoding=UTF-8&allowMultiQueries=true&serverTimezone=UTC
     username: root
     password: 123
+  influx:
+    url: http://158.222.187.108:8086
+    database: telegraf
 
 mybatis:
   mapper-locations: classpath:mapper/*.xml
 
-crontest:
-  cron1: 0/5 * * * * ?
-  cron2: 0 0 2 * * ?
+

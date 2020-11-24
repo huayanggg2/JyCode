@@ -27,13 +27,14 @@ public class AutoctlController {
     AgentService agentService;
     @Autowired
     JydataService jydataService;
+
     @ResponseBody//修改cpu阀值
     @PostMapping(value = "/site/changeCpu", produces = "application/json;charset=UTF-8")
-     public Map<String,Object> changeCpu(@RequestBody String json) {
+    public Map<String, Object> changeCpu(@RequestBody String json) {
         JSONObject ob = JSONObject.parseObject(json);
         String gpsn = ob.getJSONObject("bizContent").getString("gpsn");
         String cpuValue = ob.getJSONObject("bizContent").getString("cpuValue");
-        agentService.setCpuwarn(gpsn,cpuValue);
+        agentService.setCpuwarn(gpsn, cpuValue);
         List<String> all_ips = agentService.selectAllip(gpsn);
         Sshhost sshhost = new Sshhost();
         Jshell jshell = new Jshell();
@@ -50,11 +51,12 @@ public class AutoctlController {
             result = jshell.execute(conn, cmd);
             strlst.add(result);
         }
-            resultMap.put("status", "0000");
-            resultMap.put("message","成功");
-            return resultMap;
+        resultMap.put("status", "0000");
+        resultMap.put("message", "成功");
+        return resultMap;
 
     }
+
     @ResponseBody//单台自动控制开关
     @PostMapping(value = "/site/openAuctl", produces = "application/json;charset=UTF-8")
     public Map<String, Object> openAuctl(@RequestBody String json) {
@@ -70,9 +72,9 @@ public class AutoctlController {
         String result;
         List<String> strlst = new ArrayList();
         String cmd = "";
-        if(action.equals("open")){
+        if (action.equals("open")) {
             cmd = "echo -e \"$(crontab -l)\\n */5 * * * * /bin/bash /home/log/check/cpucheck.sh\" | crontab";
-        }else {
+        } else {
             cmd = "crontab -l | grep -v \"cpucheck.sh\" | crontab";
         }
         for (int i = 0, leth = iparr.size(); i < leth; i++) {
@@ -87,9 +89,10 @@ public class AutoctlController {
             e.printStackTrace();
         }
         resultMap.put("status", "0000");
-            resultMap.put("message", "成功");
+        resultMap.put("message", "成功");
         return resultMap;
     }
+
     @ResponseBody//查看cpu阀值
     @PostMapping(value = "/site/cpuWaring", produces = "application/json;charset=UTF-8")
     public Map<String, Object> cpuWaring(@RequestBody String json) {
@@ -97,16 +100,43 @@ public class AutoctlController {
         int currentPage = ob.getJSONObject("bizContent").getInteger("currentPage");
         int pageSize = ob.getJSONObject("bizContent").getInteger("pageSize");
         Map<String, Object> resultMap = new HashMap<String, Object>();
-        PageHelper.startPage(currentPage,pageSize);
-        List<Jysystm>  syslist = jydataService.getSystm();
+        PageHelper.startPage(currentPage, pageSize);
+        List<Jysystm> syslist = jydataService.getSystm();
         PageInfo<Jysystm> pageInfo = new PageInfo<Jysystm>(syslist);
         resultMap.put("syslist", pageInfo.getList());
-        resultMap.put("pages",pageInfo.getTotal());
+        resultMap.put("pages", pageInfo.getTotal());
         resultMap.put("status", "0000");
-        resultMap.put("message","成功");
+        resultMap.put("message", "成功");
         return resultMap;
     }
-
+    @ResponseBody//查询系统
+    @PostMapping(value = "/site/showSystm", produces = "application/json;charset=UTF-8")
+    public Map<String, Object> showSystm(@RequestBody String json) {
+        JSONObject ob = JSONObject.parseObject(json);
+        int currentPage = ob.getJSONObject("bizContent").getInteger("currentPage");
+        int pageSize = ob.getJSONObject("bizContent").getInteger("pageSize");
+        Map<String, Object> resultMap = new HashMap<String, Object>();
+        PageHelper.startPage(currentPage, pageSize);
+        List<Jysystm> systms = jydataService.getSystm();
+        PageInfo<Jysystm> pageInfo = new PageInfo<Jysystm>(systms);
+        resultMap.put("systms", pageInfo.getList());
+        resultMap.put("pages", pageInfo.getTotal());
+        resultMap.put("status", "0000");
+        resultMap.put("message", "成功");
+        return resultMap;
+    }
+    @ResponseBody//添加系统
+    @PostMapping(value = "/site/addsystm", produces = "application/json;charset=UTF-8")
+    public String addSystm(@RequestBody String json) {
+        JSONObject ob = JSONObject.parseObject(json);
+        Jysystm jstm = new Jysystm();
+        jstm.setGpsn(ob.getJSONObject("bizContent").getString("gpsn"));
+        jstm.setSysgp(ob.getJSONObject("bizContent").getString("sysgp"));
+        //jstm.setCpuValue(ob.getJSONObject("bizContent").getString("cpuValue"));
+        //jstm.setIfdsab(ob.getJSONObject("bizContent").getBoolean("ifdsab"));
+        jydataService.addSystm(jstm);
+        return "addsuccess";
+    }
    /* @ResponseBody//高峰时段停止自愈
     @PostMapping(value = "/site/stopAuto", produces = "application/json;charset=UTF-8")
     public Map<String,Object> stopAuto(@RequestBody String json) {

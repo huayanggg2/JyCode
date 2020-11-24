@@ -2,6 +2,7 @@ package com.example.demo.dao;
 
 import com.example.demo.model.agent.Agentpmfc;
 import com.example.demo.model.agent.Agentsystm;
+import com.example.demo.model.agent.Hostdtl;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
@@ -21,4 +22,6 @@ public interface AgentDao {
     List<String> selectAllip(String gpsn);
 
     void setCpuwarn(String gpsn, String cpuValue);
+
+    void addhost(Hostdtl hostdtl);
 }
