@@ -147,13 +147,13 @@ public class AgentController {
     @RequestMapping("/agent/selectCpu")//通过时间段搜索cpu
     public Map<String, Object> selectCpu(@RequestBody String json) {
         JSONObject obct = JSONObject.parseObject(json);
-        String hostip = obct.getJSONObject("bizContent").getString("hostip");
-        int period = obct.getJSONObject("bizContent").getInteger("period") * (-1);
+        String hostip = obct.getJSONObject("bizContent").getString("hostip");//服务器ip
+        int period = obct.getJSONObject("bizContent").getInteger("period") * (-1);//时间间隔
         Map<String, Object> resultMap = new HashMap<String, Object>();
         try {
             double[][] cpuew;
-            String cktm = null;
-            String ckcpu = null;
+            String cktm = null;//定义cpu时间
+            String ckcpu = null;//定义cpu值
             List relst = new ArrayList();
             List<Agentpmfc> targetlst = agentService.selectCpu(hostip, period);
             cpuew = new double[targetlst.size()][];
@@ -190,8 +190,8 @@ public class AgentController {
         Map<String, Object> resultMap = new HashMap<String, Object>();
         try {
             double[][] memew;
-            String cktm = null;
-            String ckmem = null;
+            String cktm = null;//内存时间
+            String ckmem = null;//内存值
             List relst = new ArrayList();
             List<Agentpmfc> targetlst = agentService.selectMem(hostip, period);
             memew = new double[targetlst.size()][];

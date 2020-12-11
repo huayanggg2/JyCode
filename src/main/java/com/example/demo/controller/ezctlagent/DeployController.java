@@ -64,10 +64,15 @@ public class DeployController {
                 // result = jshell.execute(conn,cmd);
                 result = jshell.execute(conn, cmd).split("\n");
                 lastres = hostarr[i] + " " + result[result.length - 1];
-                //lst.add(lastres);
-                hostdtl.setHostip(hostarr[i]);
-                hostdtl.setCsdeip(csdearr[i]);
-                agentService.addhost(hostdtl);
+                if(result[result.length-1].equals("VxLog部署完成")) {
+                    //lst.add(lastres);
+                    hostdtl.setHostip(hostarr[i]);
+                    hostdtl.setCsdeip(csdearr[i]);
+                    List<Hostdtl> ifhost = agentService.selectifHost(csdearr[i]);
+                    if (ifhost == null || ifhost.size() == 0) {
+                        agentService.addhost(hostdtl);
+                    }
+                }
                 JSONObject jsonObject = new JSONObject();
                 jsonObject.put("mesg", lastres);
                 lst.add(jsonObject);
@@ -102,7 +107,10 @@ public class DeployController {
                 }
             }
             if(rarr[rarr.length-1].equals("VxLog部署完成")){
-                agentService.addhost(hostdtl);
+                List<Hostdtl> ifhost = agentService.selectifHost(csdeip);
+                if (ifhost == null || ifhost.size() == 0) {
+                    agentService.addhost(hostdtl);
+                }
             }
             resultMap.put("status", "0000");
             resultMap.put("message", "成功");

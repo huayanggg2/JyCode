@@ -26,4 +26,6 @@ public interface JydataDao {
     List<Jysystm> getSystm();
 
     void addSystm(Jysystm jstm);
+
+    List<String> getAllHost(String gpsn);
 }

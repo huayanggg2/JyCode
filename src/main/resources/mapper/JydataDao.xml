@@ -67,8 +67,8 @@
     <insert id="addSystm" parameterType="com.example.demo.model.jysys.Jysystm">
         INSERT INTO
         sysname
-        (sysgp,gpsn,cpuValue,ifdsab)
+        (sysgp,gpsn,cpuValue)
         VALUES
-        (#{sysgp},#{gpsn},#{cpuValue},#{ifdsab})
+        (#{sysgp},#{gpsn},#{cpuValue})
     </insert>
 </mapper>

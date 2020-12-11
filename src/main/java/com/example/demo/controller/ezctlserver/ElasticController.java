@@ -39,7 +39,7 @@ public class ElasticController {
         Map<String, Object> resultMap = new HashMap<String, Object>();
         PageHelper.startPage(currentPage, pageSize);
         try {
-            List<Esmfc> eslst = motorService.selectesByIp(iparr);
+            List<Esmfc> eslst = motorService.selectesByIp(iparr);//通过ip查询
             List<Esmfc> alleslst = motorService.selectesByIp(null);
             PageInfo<Esmfc> pageInfo = new PageInfo<Esmfc>(eslst);
             if (eslst.size() > 0) {
@@ -72,11 +72,7 @@ public class ElasticController {
         sshhost.setUsername("root");
         sshhost.setPassword("123456");
         for (int i = 0, ds = dataList.size(); i < ds; i++) {
-            //JSONObject jbt = JSONObject.parseObject(dataList.get(i).toString());
             sshhost.setHostip((String) dataList.get(i));
-            //sshhost.setHostip(jbt.getString("acsdeip"));
-            //String compts = jbt.getString("zujian");
-            //String cmd = "/home/loginsight/python/bin/supervisorctl " + execmd + " " + compts;
             String cmd = "/home/loginsight/python/bin/supervisorctl " + execmd + " " + "es-9200";
             conn = jshell.login(sshhost);
             result = jshell.execute(conn, cmd);
@@ -98,29 +94,6 @@ public class ElasticController {
         return resultMap;
 
     }
-
-  /*  @ResponseBody
-    @RequestMapping("/elstc/selectesByIp")//通过ip搜索
-    public Map<String, Object> selectByIp(@RequestBody String json) {
-        JSONObject obct = JSONObject.parseObject(json);
-        String hostip = obct.getJSONObject("bizContent").getString("hostip");
-        String[] iparr = hostip.split(",");
-        Map<String, Object> resultMap = new HashMap<String, Object>();
-        try {
-            List<Esmfc> eslst = motorService.selectesByIp(iparr);
-            if (eslst != null) {
-                resultMap.put("status", "0000");
-                resultMap.put("message", "成功");
-                resultMap.put("eslst", eslst);
-            } else {
-                resultMap.put("status", 1);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            resultMap.put("status", -1);
-        }
-        return resultMap;
-    }*/
 
 
 }

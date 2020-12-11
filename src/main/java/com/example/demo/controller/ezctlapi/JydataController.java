@@ -21,41 +21,6 @@ import java.util.Map;
 public class JydataController {
     @Autowired
     JydataService jydataService;
-
-    /*  @ResponseBody
-      @RequestMapping("/findjyl/selectAlljy")//查询所有
-      public Map<String, Object> selectAlljy(@RequestBody String json) {
-          JSONObject ob = JSONObject.parseObject(json);
-          int currentPage = ob.getJSONObject("bizContent").getInteger("currentPage");
-          int pageSize = ob.getJSONObject("bizContent").getInteger("pageSize");
-          Map<String, Object> resultMap = new HashMap<String, Object>();
-          PageHelper.startPage(currentPage,pageSize);
-          try {
-              List<Jydata> jylist = jydataService.getAll();
-              List<Jydata> alljy = jydataService.getAll();
-              List<Jysystm>  syslist = jydataService.getSystm();
-              Jysystm jstm = new Jysystm();
-              jstm.setGpsn("all");//选择器，给前端返回一个所有系统选项
-              jstm.setId(syslist.size()+1);
-              jstm.setSysgp("所有系统");
-              syslist.add(0,jstm);
-              PageInfo<Jydata> pageInfo = new PageInfo<Jydata>(jylist);
-              if (jylist.size() > 0) {
-                  resultMap.put("status", "0000");
-                  resultMap.put("message", "成功");
-                  resultMap.put("syslist", syslist);
-                  resultMap.put("alljy",alljy);
-                  resultMap.put("jylist", pageInfo.getList());
-                  resultMap.put("pages",pageInfo.getTotal());
-              } else {
-                  resultMap.put("code", 1);
-              }
-          } catch (Exception e) {
-              e.printStackTrace();
-              resultMap.put("code", -1);
-          }
-          return resultMap;
-      }*/
     @ResponseBody
     @RequestMapping("/findjyl/findbydate")//根据时间段和交易名称查询
     public Map<String, Object> findbydate(@RequestBody String json) {

@@ -29,20 +29,24 @@ public class AnalysisController {
         String sysaplatn = ob.getJSONObject("bizContent").getString("sysaplatn");
         String lstfxbgtm = gdt.getLastmonth(fxbgtm);
         String lstfxedtm = gdt.getLastmonth(fxedtm);
-        //前端需要，所以写的很复杂
         Map<String, Object> resultMap = new HashMap<String, Object>();
         String[] iparr = sysaplatn.split(",");
-        List<String> timels = new ArrayList<>();
-        List<Integer> jlyls = new ArrayList<>();
+        List<String> timels = new ArrayList<>();//定义时间list
+        List<Integer> jlyls = new ArrayList<>();//定义交易量list
         double a = 1, b = 1;
-        if (iparr.length > 1) {
-            List<Analysis> latps = analysisService.slcttps(fxbgtm, fxedtm, "hlwtps");
-            List<Analysis> lasttps = analysisService.slcttps(lstfxbgtm, lstfxedtm, "hlwtps");
-            List<Analysis> lajyl = analysisService.slctonesys(fxbgtm, fxedtm, "hlwjyl");
-            List<Analysis> lastjyl = analysisService.slctonesys(lstfxbgtm, lstfxedtm, "hlwjyl");
+        if (iparr.length > 1) {//判断长度是否大于一，大于则为互联网系统交易量和tps
+            List<Analysis> latps = analysisService.slcttps(fxbgtm, fxedtm, "hlwtps");//根据时间段查询tps
+            List<Analysis> lasttps = analysisService.slcttps(lstfxbgtm, lstfxedtm, "hlwtps");//根据时间段查询上个月tps
+            List<Analysis> lajyl = analysisService.slctonesys(fxbgtm, fxedtm, "hlwjyl");//根据时间段查询交易量
+            List<Analysis> lastjyl = analysisService.slctonesys(lstfxbgtm, lstfxedtm, "hlwjyl");//根据时间段查询上个月交易量
+            if(lastjyl == null || lasttps == null || lastjyl.size() == 0 || lasttps.size() == 0) {
+                lastjyl = lajyl;
+                lasttps = latps;
+            }
             double c = 1, d = 1;
             for (int i = 0, lenth = latps.size(); i < lenth; i++) {
-                a = latps.get(i).getEntries();
+
+                    a = latps.get(i).getEntries();
                 b = lasttps.get(i).getEntries();
                 latps.get(i).setRatio(String.format("%.2f", (a / b - 1) * 100));
                 c = lajyl.get(i).getEntries();
@@ -52,10 +56,13 @@ public class AnalysisController {
             resultMap.put("latps", latps);
             resultMap.put("lajyl", lajyl);
         } else {
-            List<Analysis> lajyl = analysisService.slctonesys(fxbgtm, fxedtm, sysaplatn);
-            List<Analysis> lastjyl = analysisService.slctonesys(lstfxbgtm, lstfxedtm, sysaplatn);
+            List<Analysis> lajyl = analysisService.slctonesys(fxbgtm, fxedtm, sysaplatn);//本月交易量
+            List<Analysis> lastjyl = analysisService.slctonesys(lstfxbgtm, lstfxedtm, sysaplatn);//上个月交易量
             lajyl.forEach(any -> timels.add(any.getJydate()));
             lajyl.forEach(any -> jlyls.add(any.getEntries()));
+            if(lastjyl == null || lastjyl.size() == 0) {
+                lastjyl = lajyl;
+            }
             for (int i = 0, lenth = lajyl.size(); i < lenth; i++) {
                 a = lajyl.get(i).getEntries();
                 b = lastjyl.get(i).getEntries();

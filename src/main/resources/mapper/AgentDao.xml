@@ -48,6 +48,9 @@
         WHERE a.checktime = b.checktime AND a.ahostip = b.ahostip) atc ON htl.hostip = atc.ahostip WHERE htl.hgpsn =
         #{gpsn}
     </select>
+    <select id="selectifHost" resultType="com.example.demo.model.agent.Hostdtl" parameterType="string"><!--查询某个系统所有服务器状态-->
+        SELECT * FROM `hostdtl` where csdeip = #{csdeip}
+    </select>
 
     <select id="selectByIp" resultMap="pmfcmap"><!--根据Ip搜索某个服务器数据-->
         SELECT htl.hostip ahtp,c.acsdeip hcdp,htl.agentvsn hatn,c.vxstatus avts,c.cpu
@@ -82,6 +85,12 @@
     <select id="selectAllip" resultType="string" parameterType="string">
         SELECT hostip FROM hostdtl WHERE hgpsn = #{gpsn}
     </select>
+    <delete id="deleteSystm" parameterType="string">
+        DELETE FROM sysname WHERE gpsn = #{gpsn}
+    </delete>
+    <delete id="deleteIps" parameterType="string">
+        DELETE FROM hostdtl WHERE hgpsn = #{gpsn}
+    </delete>
     <update id="setCpuwarn" parameterType="string">
         UPDATE sysname SET cpuValue = #{cpuValue} WHERE gpsn = #{gpsn}
     </update>

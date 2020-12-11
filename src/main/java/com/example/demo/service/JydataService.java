@@ -45,4 +45,5 @@ public class JydataService {
     public void addSystm(Jysystm jstm) {
         jydataDao.addSystm(jstm);
     }
+
 }

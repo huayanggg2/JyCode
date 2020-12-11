@@ -132,9 +132,17 @@ public class AutoctlController {
         Jysystm jstm = new Jysystm();
         jstm.setGpsn(ob.getJSONObject("bizContent").getString("gpsn"));
         jstm.setSysgp(ob.getJSONObject("bizContent").getString("sysgp"));
-        //jstm.setCpuValue(ob.getJSONObject("bizContent").getString("cpuValue"));
-        //jstm.setIfdsab(ob.getJSONObject("bizContent").getBoolean("ifdsab"));
+        jstm.setCpuValue(ob.getJSONObject("bizContent").getString("cpuValue"));
+        jstm.setIfdsab(true);
         jydataService.addSystm(jstm);
+        return "addsuccess";
+    }
+    @ResponseBody//删除系统
+    @PostMapping(value = "/site/deletesystm", produces = "application/json;charset=UTF-8")
+    public String deleteSystm(@RequestBody String json) {
+        JSONObject ob = JSONObject.parseObject(json);
+        String gpsn = ob.getJSONObject("bizContent").getString("gpsn");
+        agentService.deleteSystm(gpsn);
         return "addsuccess";
     }
    /* @ResponseBody//高峰时段停止自愈

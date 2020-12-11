@@ -12,6 +12,17 @@ public class Hostrst8 {
     @Column(name = "io_avg")
     private double io_avg;
 
+    public double getLastio() {
+        return lastio;
+    }
+
+    public void setLastio(double lastio) {
+        this.lastio = lastio;
+    }
+
+    @Column(name = "lastio")
+    private double lastio;
+
     public long getTime() {
         return time;
     }

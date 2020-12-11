@@ -11,8 +11,8 @@
         (#{jydate},#{sysaplatn},#{type},#{entries})
     </insert>
     <select id="slctonesys" resultType="com.example.demo.model.Analysis">
-        SELECT DATE_FORMAT(jydate, '%Y-%m-%d') jydate,entries FROM analysis WHERE sysaplatn = #{sysaplatn} AND jydate &gt;= #{fxbgtm} and jydate &lt;= #{fxedtm}
-    </select>
+    SELECT DATE_FORMAT(jydate, '%Y-%m-%d') jydate,entries FROM analysis WHERE sysaplatn = #{sysaplatn} AND jydate &gt;= #{fxbgtm} and jydate &lt;= #{fxedtm}
+</select>
 <select id="slcttps" resultType="com.example.demo.model.Analysis">
     select MAX(entries) entries,DATE_FORMAT(jydate, '%Y-%m-%d') jydate
     FROM

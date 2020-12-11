@@ -22,7 +22,7 @@ import java.util.Map;
 @Controller
 public class UpfileController {
     @Value("${logup.logfile}")
-    private String logfile;
+    private String logfile;//日志存放路径
 
     @ResponseBody
     @RequestMapping(value = "/upfile/flist", method = RequestMethod.POST)
@@ -31,7 +31,7 @@ public class UpfileController {
         Sshhost sshhost = new Sshhost();//创建主机对象
         Jshell jshell = new Jshell();//创建shell会话
         Connection conn = null;
-        sshhost.setHostip("158.222.188.158");
+        sshhost.setHostip("158.222.188.158");//固定存放日志服务器ip
         sshhost.setUsername("log");
         sshhost.setPassword("log");
         List<MultipartFile> files = ((MultipartHttpServletRequest) request).getFiles("fileList");//获取前端多文件集合

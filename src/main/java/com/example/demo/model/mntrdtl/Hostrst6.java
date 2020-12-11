@@ -1,7 +1,5 @@
 package com.example.demo.model.mntrdtl;
 
-import com.example.demo.alltools.Jisuan;
-import lombok.Data;
 import org.influxdb.annotation.Column;
 import org.influxdb.annotation.Measurement;
 

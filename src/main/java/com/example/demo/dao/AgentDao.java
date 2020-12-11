@@ -24,4 +24,10 @@ public interface AgentDao {
     void setCpuwarn(String gpsn, String cpuValue);
 
     void addhost(Hostdtl hostdtl);
+
+    List<Hostdtl> selectifHost(String csdeip);
+
+    void deleteSystm(String gpsn);
+
+    void deleteIps(String gpsn);
 }

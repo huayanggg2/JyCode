@@ -19,8 +19,8 @@ public class GetDatetime {
         dateToday = new SimpleDateFormat("yyyy-MM-dd").format(c.getTime());//获取现在时间
         c.set(Calendar.HOUR, c.get(Calendar.HOUR) - 8);//转换时区
 
-        dateToday1 = new SimpleDateFormat("yyyy-MM-dd").format(c.getTime());
-        c.add(Calendar.DAY_OF_MONTH, -1);
+        dateToday1 = new SimpleDateFormat("yyyy-MM-dd").format(c.getTime());//定义日期格式
+        c.add(Calendar.DAY_OF_MONTH, -1);//获取前一天
         dateToday2 = new SimpleDateFormat("yyyy-MM-dd").format(c.getTime());
     }
     public void getMinutetime(){
@@ -37,7 +37,7 @@ public class GetDatetime {
     public String getLastmonth(String timestr) throws ParseException {
         //获取现在时间
         c.setTime(new SimpleDateFormat("yyyy-MM-dd").parse(timestr));
-        c.add(Calendar.DAY_OF_MONTH, -28);//转换时区
+        c.add(Calendar.DAY_OF_MONTH, -28);//转换时区，往前推28天，用来计算环比值
         dateToday = new SimpleDateFormat("yyyy-MM-dd").format(c.getTime());
         return dateToday;
     }

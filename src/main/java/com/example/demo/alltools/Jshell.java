@@ -6,18 +6,16 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 
-import ch.ethz.ssh2.SCPClient;
+import ch.ethz.ssh2.*;
 import com.example.demo.model.agent.Sshhost;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import ch.ethz.ssh2.Connection;
-import ch.ethz.ssh2.Session;
-import ch.ethz.ssh2.StreamGobbler;
 
 public class Jshell {
     private static final Logger log = LoggerFactory.getLogger(Jshell.class);
     private static String  DEFAULTCHART="UTF-8";
+    private static final int TIME_OUT = 10 * 5 * 60;
     /**
      * 登录主机
      * @return
@@ -42,9 +40,9 @@ public class Jshell {
     }
 
     //,String hostid,String username,String password,String logDir
-    public void scpagt(String filepath, String logdir, Connection conn){
-        SCPClient client = new SCPClient(conn);
+    public void scpagt(String filepath, String logdir, Connection conn) {
         try {
+            SCPClient client = new SCPClient(conn);
             client.put(filepath, logdir); //本地文件scp到远程目录
         } catch (IOException e) {
             e.printStackTrace();
@@ -58,6 +56,7 @@ public class Jshell {
 
                 Session session= conn.openSession();//打开一个会话
                 session.execCommand(cmd);//执行命令
+                session.waitForCondition(ChannelCondition.EXIT_STATUS, TIME_OUT);
                 result=processStdout(session.getStdout(),DEFAULTCHART);
                 //如果为得到标准输出为空，说明脚本执行出错了
                 if(StringUtils.isBlank(result)){

@@ -1,16 +1,16 @@
 package com.example.demo.model.mntrdtl;
 
-import com.example.demo.alltools.Jisuan;
 import org.influxdb.annotation.Column;
 import org.influxdb.annotation.Measurement;
 
 @Measurement(name = "mem")
 public class Hostrst2 {
     @Column(name = "mem_total")
-    private long mem_total;
+    private Long mem_total;
 
         public long getMem_total() {
-            mem_total = mem_total/1024/1024/1024;
+            double dbmem = mem_total.doubleValue()/1024/1024/1024;
+            mem_total = (long) Math.ceil(dbmem);
         return mem_total;
     }
 
